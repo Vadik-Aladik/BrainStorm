@@ -1,6 +1,12 @@
 <script>
+import { Link } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
+
 export default{
     name: "HeaderComponent",
+    components:{
+        Link
+    }
 }
 </script>
 
@@ -20,7 +26,7 @@ export default{
                 <nav class=" w-[270px] flex justify-between items-center">
                     <a href="#">Главная</a>
                     <a href="#">Прогресс</a>
-                    <a href="#">Аккаунт</a>
+                    <Link :href="route('student.personal')">Аккаунт</Link>
                 </nav>
             </div>
         </div>

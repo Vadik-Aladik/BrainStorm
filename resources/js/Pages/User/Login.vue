@@ -28,7 +28,11 @@ export default{
                 console.log(error);
                 this.email_error = error.response.data.errors.email;
                 this.password_error = error.response.data.errors.password;
-            })
+            });
+
+            if(res || res.data.login){
+                router.visit('/')
+            }
         }
     },
 }

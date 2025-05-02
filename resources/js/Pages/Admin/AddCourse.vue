@@ -45,7 +45,7 @@ export default{
             </div>
             <div class=" mt-5">
                 <p class=" font-semibold mb-1">Введите предпочитаемый цвет для курса</p>
-                <input v-model="colorCourse" type="color" value="#0077FF" name="" id="">
+                <input v-model="colorCourse" type="color" value="#2563eb" name="" id="">
             </div>
 
             <div class=" flex justify-between mt-5">

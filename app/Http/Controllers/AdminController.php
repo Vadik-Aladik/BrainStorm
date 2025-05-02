@@ -100,10 +100,7 @@ class AdminController extends Controller
         }
 
         return response()->json([
-            'test' => $testArr,
-            'quest' => $answertArr,
-            'all' => $data,
-            'check?' => $flag
+            'result' => true
         ]);
     }
 
