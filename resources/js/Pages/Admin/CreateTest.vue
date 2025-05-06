@@ -163,7 +163,7 @@ export default{
                                     <option>checkbox</option>
                                     <option>input</option>
                                     <option>textarea</option>
-                                    <option>Delete</option>
+                                    <option class=" text-red-600 font-semibold">Delete</option>
                                 </select>
                             </div>
                             

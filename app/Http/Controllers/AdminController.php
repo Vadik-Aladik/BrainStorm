@@ -8,9 +8,13 @@ use App\Http\Resources\Admin\CourseResource;
 use App\Models\Answer;
 use App\Models\Course;
 use App\Models\Question;
+use App\Models\Student;
 use App\Models\Test;
+use App\Models\User;
+use App\Models\UserTest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use PhpParser\Builder\Use_;
 use Storage;
 
 class AdminController extends Controller
@@ -42,31 +46,6 @@ class AdminController extends Controller
                 'test_id' => $test->id,
                 'quest_text' => $elem['quest'],
             ]);
-            // foreach($elem['answers'] as $answer){
-            //     if($elem['select']=='radio' || $elem['select']=='checkbox'){
-            //         // array_push($answertArr, [$answer['answer'],$answer['status']]);
-            //         $answer = Answer::create([
-            //             'quest_id' => $quest->id,
-            //             'answer_text' => $answer['answer'],
-            //             'type' => $elem['select'],
-            //             'status' => $answer['status'],
-            //             'answer' => null
-            //         ]);
-            //     }
-            //     else{
-            //         // array_push($answertArr, [$answer['answer']]);
-            //         $answer = Answer::create([
-            //             'quest_id' => $quest->id,
-            //             'answer_text' => $answer['answer'],
-            //             'type' => $elem['select'],
-            //             'status' => null,
-            //             'answer' => $answer['answer'],
-            //         ]);
-            //         if($answer['answer'] == null || $answer['answer'] = ''){
-            //             array_push($emptyAnswer, $elem['quest']);
-            //         }
-            //     }
-            // }
 
             foreach($elem['answers'] as $answerItem){ // Переименуем переменную, чтобы не было конфликта
                 if($elem['select'] == 'radio' || $elem['select'] == 'checkbox'){
@@ -147,11 +126,75 @@ class AdminController extends Controller
 
     public function course($id)
     {
-        $name=Course::where("id", $id)->get();
+        // $name=Course::where("id", $id)->get();
+        // $testsCourse = Test::where('course_id', $id)->get();
         return Inertia::render("Admin/Course", [
             'course_id' => $id,
-            'name' => $name[0]['course_name'],
-            'id'=>$name[0]['id'],
+            // 'tests' => $testsCourse,
+            // 'name' => $name[0]['course_name'],
+            // 'id'=>$name[0]['id'],
+        ]);
+    }
+
+    public function courseData($id)
+    {
+        $course=Course::where("id", $id)->get();
+        $users = User::all();
+
+        // $studentsCourse = Student::where('course_id', $id)->with('courseStudent')->get();
+        $students = Student::where('course_id', $id)->with('user')->get();
+        $studentsCourse = $students->pluck('user');
+        
+        $testsCourse = Test::where('course_id', $id)->get();
+
+        return response()->json([
+            "tests" => $testsCourse,
+            "users_for_add" => $users,
+            "users_in_course" => $studentsCourse,
+            "course_name" => $course[0]['course_name'],
+            "course_id" => $course[0]['id']
+        ]);
+    }
+
+    public function delete($id)
+    {
+        return Test::find($id)->delete();
+    }
+
+    public function addStudent($idStudent, $idCourse)
+    {
+        Student::create([
+            'student_id'=> $idStudent,
+            'course_id'=> $idCourse,
+        ]);
+    }
+
+    public function deleteStudent($idStudent, $idCourse)
+    {
+        Student::where('student_id', $idStudent)->where('course_id', $idCourse)->delete();
+    }
+
+    public function progress()
+    {
+        return Inertia::render("Admin/Progress");
+    }
+
+    public function progressData()
+    {
+        // $testForCheck = Test::where('check', true)->with(['testStudent', 'userTest.answerGet'])->get();
+        $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
+        // $testForCheck = Test::where('check', true)->with('testStudent.answerGet')->get();
+        return response()->json([
+            'course_for_check' => $testForCheck,
+        ]);
+    }
+
+    public function checkTest($idTest, $idUser)
+    {
+        $userTest = UserTest::where('user_id', $idUser)->where('test_id', $idTest)->with('answerGet')->get();
+        return Inertia::render("Admin/CheckTest",[
+            'id_test' => $idTest,
+            'user_test' => $userTest,
         ]);
     }
 }

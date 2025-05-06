@@ -17,6 +17,8 @@ class UserResultResource extends JsonResource
         // return parent::toArray($request);
         return [
             "id" => $this->id,
+            "course_id" => $this->course_id,
+            "test_id" => $this->test_id,
             'name_test' => $this->testGet->test_name,
             'name_course' => $this->courseGet->course_name,
             'score' => $this->score_student,

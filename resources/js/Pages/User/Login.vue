@@ -23,16 +23,16 @@ export default{
                 email: this.email,
                 password: this.password
             }).then((res)=>{
-                console.log(res);
+                console.log(res.data);
             }).catch((error)=>{
                 console.log(error);
                 this.email_error = error.response.data.errors.email;
                 this.password_error = error.response.data.errors.password;
             });
 
-            if(res || res.data.login){
-                router.visit('/')
-            }
+            // if(res || res.login){
+            //     router.visit('/')
+            // }
         }
     },
 }

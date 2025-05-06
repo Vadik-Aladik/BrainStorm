@@ -12,10 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_answers', function (Blueprint $table) {
+            // $table->id();
+            // $table->foreignId('test_id')->constrained('tests')->onDelete('cascade');
+            // $table->foreignId('quest_id')->constrained('questions')->onDelete('cascade');
+            // $table->foreignId('answer_id')->constrained('answers')->onDelete('cascade');
+            // // $table->foreignId('test_id');
+            // // $table->foreignId('quest_id');
+            // // $table->foreignId('answer_id');
+            // $table->string('answer')->nullable();
+            // $table->boolean('status');
+            // $table->timestamps();
             $table->id();
-            $table->foreignId('test_id')->constrained('tests')->onDelete('cascade');
-            $table->foreignId('quest_id')->constrained('quests')->onDelete('cascade');
+            $table->foreignId('test_id')->constrained('user_tests')->onDelete('cascade');
+            $table->foreignId('answer_id')->constrained('answers')->onDelete('cascade');
             $table->string('answer')->nullable();
+            $table->boolean('status');
             $table->timestamps();
         });
     }

@@ -35,6 +35,10 @@ export default{
                 this.password_error = error.response.data.errors.password;
                 this.password_confirm_error = error.response.data.errors.password_confirm;
             })
+
+            if(res || res.data.auth){
+                router.visit('/');
+            }
         }
     }
 }

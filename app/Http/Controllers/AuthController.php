@@ -22,7 +22,6 @@ class AuthController extends Controller
         if(auth()->attempt($data, true)){
             return response()->json([
                 'login' => true,
-                'role'=> auth()->user()->role
             ]);
         }
         return response()->json([
@@ -47,7 +46,7 @@ class AuthController extends Controller
             ]);
             auth()->login($user, true);
             return response()->json([
-                'data' => $data
+                'auth' => true
             ]);
         }
         else{
@@ -59,14 +58,17 @@ class AuthController extends Controller
             ]);
             auth()->login($user, true);
             return response()->json([
-                'data' => $data
+                'auth' => true
             ]);
         }
     }
 
     public function personal()
     {
-        return Inertia::render("User/Personal");
+        $user = auth()->user();
+        return Inertia::render("User/Personal",[
+            "role"=>$user->role
+        ]);
     }
 
     public function logout()

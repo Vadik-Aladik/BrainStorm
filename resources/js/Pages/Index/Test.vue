@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 export default{
     data(){
@@ -35,7 +36,7 @@ export default{
             
             if(type == 'checkbox'){
                 if(!this.answers[quest_key]){
-                    this.answers[quest_key] = {quest_id: quest_id, type:type, answers_id:[]};
+                    this.answers[quest_key] = {quest_id: quest_id, type:type, answers_id:[], status: 0};
                 }
 
                 const indexValue = this.answers[quest_key].answers_id.indexOf(answer_id);
@@ -47,11 +48,11 @@ export default{
             }
 
             if(type == 'input'){
-                this.answers[quest_key] = {quest_id: quest_id, type:'input', user_answers: event.target.value, correct_answer:status}
+                this.answers[quest_key] = {quest_id: quest_id, type:'input', answers_id:answer_id, user_answers: event.target.value, correct_answer:status, status: 0}
             }
 
             if(type == 'textarea'){
-                this.answers[quest_key] = {quest_id: quest_id, type:'textarea', user_answers: event.target.value}
+                this.answers[quest_key] = {quest_id: quest_id, type:'textarea', answers_id:answer_id, user_answers: event.target.value, status: 0}
             }
         },
 
@@ -96,28 +97,33 @@ export default{
                             const userAnswer = elem.answers_id.sort()
                             if(JSON.stringify(correctAnswer) == JSON.stringify(userAnswer)){
                                 this.true_answer++;
+                                elem.status = 1;
                             }
                         });
                     }
 
                     if(elem.type == 'input' && (elem.user_answers == elem.correct_answer)){
                         this.true_answer++;
+                        elem.status = 1;
                     }
                 });
 
                 // console.log(`Ваш результат ${this.true_answer} или ${(this.true_answer/this.answers.length)*100}%`);
                 let score = Math.round((this.true_answer/this.answers.length)*100);
 
-                // const res = await axios.post('/test', {
-                //     course_id: this.id_course,
-                //     test_id: this.id_test,
-                //     answer_user: this.answers,
-                //     score: score
-                // }).catch((error)=>{
-                //     console.log(error);
-                // });
+                const res = await axios.post('/test', {
+                    course_id: this.id_course,
+                    test_id: this.id_test,
+                    answer_user: this.answers,
+                    score: score
+                }).catch((error)=>{
+                    console.log(error);
+                });
 
-                // console.log(res);
+                console.log(res);
+                if(res || res.data.status){
+                    router.visit('/');
+                }
             }
         }
     },

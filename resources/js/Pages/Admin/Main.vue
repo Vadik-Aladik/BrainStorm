@@ -127,10 +127,10 @@ export default{
                         <img src="/public/img/logo/Student.svg" alt="course_create">
                         <h1 class=" font-semibold text-xl text-center text-white mt-3">Студенты</h1>
                     </div>
-                    <div class=" w-[173px] h-[173px] rounded-xl bg-yellow-500 flex flex-col justify-center items-center cursor-pointer mr-4">
+                    <Link :href="route('admin.progress')" class=" w-[173px] h-[173px] rounded-xl bg-yellow-500 flex flex-col justify-center items-center cursor-pointer mr-4">
                         <img src="/public/img/logo/Progress.svg" alt="course_create">
                         <h1 class=" font-semibold text-xl text-center text-white mt-3">Прогресс</h1>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

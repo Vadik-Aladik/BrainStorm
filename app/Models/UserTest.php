@@ -19,4 +19,14 @@ class UserTest extends Model
     {
         return $this->hasOne(Course::class, 'id', 'course_id');
     }
+
+    public function answerGet()
+    {
+        return $this->hasMany(UserAnswer::class, 'test_id', 'id');
+    }
+
+    public function userGet()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -24,7 +24,7 @@ export default{
                 
 
                 <nav class=" w-[270px] flex justify-between items-center">
-                    <a href="#">Главная</a>
+                    <Link :href="route('student.index')">Главная</Link>
                     <a href="#">Прогресс</a>
                     <Link :href="route('student.personal')">Аккаунт</Link>
                 </nav>
