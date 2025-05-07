@@ -25,6 +25,7 @@ class IndexController extends Controller
         $res = Student::where('student_id', auth()->id())->with('curs')->get();
         $courseStudent = $res->pluck('curs')->sort();
         $resourceCourse = CourseResource::collection($courseStudent); 
+        
         $resultUser = UserTest::where('user_id', auth()->id())->with(['testGet', 'courseGet'])->get();
         $resourceResult = UserResultResource::collection($resultUser);
 
@@ -64,6 +65,8 @@ class IndexController extends Controller
     {
         $data=$request->validated();
         $textareaFlag = false;
+
+        $test=Test::where('id', $data['test_id'])->get();
 
         // foreach($data['answer_user'] as $answer){
         //     if($answer['type'] == 'radio'){
@@ -158,12 +161,23 @@ class IndexController extends Controller
                 }
             }
             if($answer['type'] == 'input'){
-                UserAnswer::create([
-                    "test_id" => $userTest->id,
-                    "answer_id" => $answer['answers_id'],
-                    "answer" => $answer['user_answers'],
-                    "status" => $answer['status'],
-                ]);
+                if($answer['user_answers'] == null || $answer['user_answers']==""){
+                    $textareaFlag=true;
+                    UserAnswer::create([
+                        "test_id" => $userTest->id,
+                        "answer_id" => $answer['answers_id'],
+                        "answer" => $answer['user_answers'],
+                        "status" => $answer['status'],
+                    ]);
+                }
+                else{
+                    UserAnswer::create([
+                        "test_id" => $userTest->id,
+                        "answer_id" => $answer['answers_id'],
+                        "answer" => $answer['user_answers'],
+                        "status" => $answer['status'],
+                    ]);
+                }
             }
             if($answer['type'] == 'textarea'){
                 $textareaFlag=true;
@@ -176,7 +190,7 @@ class IndexController extends Controller
             }
         }
 
-        if($textareaFlag){
+        if($textareaFlag || $test[0]->check){
             $userTest->update([
                 "is_checked" => false,
             ]);
@@ -185,7 +199,7 @@ class IndexController extends Controller
 
         return response()->json([
             'test_user'=>$data,
-            'status' => true
+            'status' => true,
         ]);
     }
 

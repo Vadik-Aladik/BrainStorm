@@ -108,7 +108,7 @@ export default{
                     }
                 }
                 else{
-                    console.log('не введен тип варианта ответа');
+                    console.log('не выбран тип варианта вопроса');
                     isValid = false;
                 }
             });

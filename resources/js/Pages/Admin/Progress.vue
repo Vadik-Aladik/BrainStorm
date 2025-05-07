@@ -7,6 +7,7 @@ export default{
     data(){
         return {
             infoTest:[],
+            infoCourse:[],
             dataCourse:[],
 
             modalFlag: false,
@@ -20,6 +21,7 @@ export default{
         async getData(){
             const res = await axios.post('/admin/progress/data');
             this.infoTest = res.data.course_for_check;
+            this.infoCourse = res.data.courseWithTests;
             console.log(res, this.infoTest);
         },
         modalTestCheck(index){
@@ -45,7 +47,7 @@ export default{
                 <div class=" flex flex-wrap mx-5 mt-3">
                     <div v-for="(elem, index) in infoTest" :key="index">
                         <div class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-blue-600 hover:bg-blue-200 hover:text-blue-600 transition ease-in mr-[23px] mb-[10px] cursor-pointer flex flex-col justify-between" @click.prevent="modalTestCheck(index)">
-                            <span class=" font-semibold text-xl">{{elem.test_name}}</span>
+                            <span class="truncate font-semibold text-xl">{{elem.test_name}}</span>
                             <div class=" text-sm text-end">Проверить</div>
                         </div>
                     </div>
@@ -81,12 +83,22 @@ export default{
                                 </div>
                             </div>
                             
-                            <div>
-                                <div class=" font-semibold text-red-600 hidden">
-                                    000%
+                            <div class=" ml-14">
+                                <div v-if="elem.is_checked">
+                                    <div v-if="elem.score_student <= 35" class=" font-semibold text-red-600">
+                                        {{elem.score_student}}%
+                                    </div>
+
+                                    <div v-if="(elem.score_student >= 35 && elem.score_student < 80)" class=" font-semibold text-yellow-600">
+                                        {{elem.score_student}}%
+                                    </div>
+
+                                    <div v-if="elem.score_student >= 80" class=" font-semibold text-green-700">
+                                        {{elem.score_student}}%
+                                    </div>
                                 </div>
 
-                                <div class=" font-semibold text-gray-600 ">
+                                <div v-if="!elem.is_checked" class="font-semibold text-gray-600 ">
                                     Проверить работу
                                 </div>
                             </div>

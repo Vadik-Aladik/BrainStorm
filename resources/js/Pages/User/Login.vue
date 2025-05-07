@@ -30,9 +30,9 @@ export default{
                 this.password_error = error.response.data.errors.password;
             });
 
-            // if(res || res.login){
-            //     router.visit('/')
-            // }
+            if(res || res.data){
+                router.visit('/');
+            }
         }
     },
 }

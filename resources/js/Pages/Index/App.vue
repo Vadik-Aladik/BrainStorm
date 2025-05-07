@@ -55,15 +55,15 @@ export default{
                             <div v-for="elem in result.data" :key="elem">
                                 <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
                                     <div v-if="elem.status && elem.score >= 80" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-green-700 hover:bg-green-200 hover:text-green-700 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
-                                        <span class=" font-semibold text-xl">{{elem.name_test}}</span>
+                                        <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm">{{elem.name_course}}</p>
                                         <div class="font-semibold text-xl text-green-700 text-end">{{elem.score}}%</div>
                                     </div>
                                 </Link>
                                 
                                 <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
-                                    <div v-if="elem.status && (elem.score >= 35 && elem.score <= 80)" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-yellow-600 hover:bg-yellow-200 hover:text-yellow-600 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
-                                        <span class=" font-semibold text-xl">{{elem.name_test}}</span>
+                                    <div v-if="elem.status && (elem.score >= 35 && elem.score < 80)" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-yellow-600 hover:bg-yellow-200 hover:text-yellow-600 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
+                                        <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm">{{elem.name_course}}</p>
                                         <div class="font-semibold text-xl text-yellow-600 text-end">{{elem.score}}%</div>
                                     </div>
@@ -71,7 +71,7 @@ export default{
                                 
                                 <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
                                     <div v-if="elem.status && elem.score <= 35" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-red-700 hover:bg-red-200 hover:text-red-700 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
-                                        <span class=" font-semibold text-xl">{{elem.name_test}}</span>
+                                        <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm">{{elem.name_course}}</p>
                                         <div class="font-semibold text-xl text-red-700 text-end">{{elem.score}}%</div>
                                     </div>
@@ -85,8 +85,8 @@ export default{
                     <span class="text-base my-1 text-gray-500">На проверке</span>
                     <div class="flex flex-wrap mx-5 mt-3">
                         <div v-for="elem in result.data" :key="elem">
-                            <div v-if="!elem.status" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-blue-600 hover:bg-blue-200 hover:text-blue-600 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
-                                <span class=" font-semibold text-xl">{{elem.name_test}}</span>
+                            <div v-if="elem.status==false" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] hover:border-blue-600 hover:bg-blue-200 hover:text-blue-600 transition ease-in mr-[23px] mb-[10px] cursor-pointer">
+                                <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                 <p class=" text-sm">{{elem.name_course}}</p>
                                 <div class="font-semibold text-xl text-gray-500 text-end">На проверке</div>
                             </div>

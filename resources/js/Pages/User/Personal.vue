@@ -3,6 +3,17 @@ import ComboComponent from "@/Layout/Combo.vue"
 import { route } from "ziggy-js";
 import { router, Link } from "@inertiajs/vue3";
 export default{
+    data(){
+        return{
+            user: [],
+
+            modalFlag:false,
+
+            name:'',
+            email:'',
+            password:'',
+        }
+    },
     components:{
         ComboComponent,
         Link
@@ -18,7 +29,29 @@ export default{
             if(res || res.data){
                 router.visit('/login');
             }
+        },
+        async personalData(){
+            const res = await axios.post('/personal');
+
+            this.user = res.data.user[0];
+            console.log(res);
+        },
+        async changePersonal(){
+            const res = await axios.post('/personal/change', {
+                name: this.user.name,
+                email: this.user.email,
+                password: this.password,
+            }).catch((error)=>{
+                console.log(error);
+            })
+
+            console.log(res);
+
+            // console.log(this.user.name);
         }
+    },
+    mounted(){
+        this.personalData();
     }
 }
 </script>
@@ -27,14 +60,14 @@ export default{
     <ComboComponent>
         <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]">
             <div class=" text-2xl flex justify-between">
-                <div>Здравствуйте, <span class=" font-semibold text-blue-600">UserName</span></div>
+                <div>Здравствуйте, <span class=" font-semibold text-blue-600">{{user.name}}</span></div>
                 <div class="flex items-center ">
                     <div v-if="role == 'admin'">
                         <Link :href="route('admin.main')" class="px-[30px] py-[10px] hover:bg-orange-200 hover:text-orange-600 rounded-md my-[10px] text-lg transition ease-in">
                             Admin panel
                         </Link>
                     </div>
-                    <button class="ml-14">
+                    <button @click.prevent="modalFlag = !modalFlag" class="ml-14">
                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.48 0C14.8835 0 14.4 0.483532 14.4 1.08V7.43338C13.9441 7.58866 13.5015 7.77262 13.0742 7.9831L8.58133 3.49018C8.15957 3.06842 7.47575 3.06842 7.05398 3.49018L3.49016 7.054C3.0684 7.47577 3.0684 8.15958 3.49016 8.58135L7.98309 13.0743C7.77261 13.5015 7.58866 13.9441 7.43338 14.4H1.08C0.483532 14.4 0 14.8835 0 15.48V20.52C0 21.1165 0.483531 21.6 1.08 21.6H7.43339C7.58866 22.0559 7.77262 22.4985 7.98309 22.9257L3.49017 27.4187C3.0684 27.8404 3.0684 28.5243 3.49017 28.946L7.05399 32.5098C7.47575 32.9316 8.15957 32.9316 8.58134 32.5098L13.0743 28.0169C13.5015 28.2274 13.9441 28.4113 14.4 28.5666V34.92C14.4 35.5165 14.8835 36 15.48 36H20.52C21.1165 36 21.6 35.5165 21.6 34.92V28.5666C22.0559 28.4113 22.4985 28.2274 22.9257 28.0169L27.4187 32.5098C27.8404 32.9316 28.5242 32.9316 28.946 32.5098L32.5098 28.946C32.9316 28.5243 32.9316 27.8404 32.5098 27.4187L28.0169 22.9258C28.2274 22.4985 28.4113 22.0559 28.5666 21.6H34.92C35.5165 21.6 36 21.1165 36 20.52V15.48C36 14.8835 35.5165 14.4 34.92 14.4H28.5666C28.4113 13.9441 28.2274 13.5015 28.0169 13.0743L32.5098 8.58134C32.9316 8.15958 32.9316 7.47576 32.5098 7.05399L28.946 3.49017C28.5242 3.06841 27.8404 3.06841 27.4187 3.49017L22.9257 7.98309C22.4985 7.77262 22.0559 7.58866 21.6 7.43338V1.08C21.6 0.483532 21.1165 0 20.52 0H15.48ZM18 24.12C21.38 24.12 24.12 21.38 24.12 18C24.12 14.62 21.38 11.88 18 11.88C14.62 11.88 11.88 14.62 11.88 18C11.88 21.38 14.62 24.12 18 24.12Z" fill="black"/>
                         </svg>
@@ -50,4 +83,32 @@ export default{
             </div>
         </div>
     </ComboComponent>
+
+    <div v-if="modalFlag">
+        <div class=" bg-black bg-opacity-50 h-full w-full flex items-center justify-center fixed top-0 left-0 text-lg">
+            <div class=" min-w-[400px] py-8 px-[77px] bg-white rounded-md">
+                <div class=" flex justify-between">
+                    <span class=" text-xl">Редактирование аккаунта</span>
+                    <div>
+                        <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11.2906" cy="7.03448" r="5.53448" stroke="black" stroke-width="3"/>
+                        <path d="M5 17.5H18C19.933 17.5 21.5 19.067 21.5 21V26.5H1.5V21C1.5 19.067 3.067 17.5 5 17.5Z" stroke="black" stroke-width="3"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.6749 23.3498C18.809 23.3498 21.3498 20.809 21.3498 17.6749C21.3498 14.5407 18.809 12 15.6749 12C12.5407 12 10 14.5407 10 17.6749C10 20.809 12.5407 23.3498 15.6749 23.3498ZM19.695 16.8475H11.5373V18.7391H19.695V16.8475Z" fill="#CD0000"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex flex-col mt-8">
+                    <input v-model="user.name" placeholder="Введите новое имя" class=" w-[370px] h-[30px] px-[10px] focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded mt-[5px] placeholder:font-light" type="text">
+                    <input v-model="user.email" placeholder="Введите новую почту" class=" w-[370px] h-[30px] px-[10px] focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded mt-[5px] placeholder:font-light" type="email">
+                    <input v-model="password" placeholder="Введите новый пароль" class=" w-[370px] h-[30px] px-[10px] focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded mt-[5px] placeholder:font-light" type="password">
+                </div>
+
+                <div class=" flex flex-col items-center mt-5">
+                    <button @click.prevent="changePersonal" class="px-[30px] py-[10px] hover:bg-green-200 hover:text-green-600 rounded-md transition easy-in mb-3">Сохранить изменения</button>
+                    <button @click.prevent="modalFlag = !modalFlag" class="px-[30px] py-[10px] hover:bg-blue-200 hover:text-blue-600 rounded-md transition easy-in mb-3">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

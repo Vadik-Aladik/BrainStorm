@@ -123,10 +123,10 @@ export default{
             <div class=" mt-8">
                 <span class=" font-semibold text-xl">Другое</span>
                 <div class="flex flex-wrap mx-5 mt-3">
-                    <div class=" w-[173px] h-[173px] rounded-xl bg-green-400 flex flex-col justify-center items-center cursor-pointer mr-4">
+                    <!-- <div class=" w-[173px] h-[173px] rounded-xl bg-green-400 flex flex-col justify-center items-center cursor-pointer mr-4">
                         <img src="/public/img/logo/Student.svg" alt="course_create">
                         <h1 class=" font-semibold text-xl text-center text-white mt-3">Студенты</h1>
-                    </div>
+                    </div> -->
                     <Link :href="route('admin.progress')" class=" w-[173px] h-[173px] rounded-xl bg-yellow-500 flex flex-col justify-center items-center cursor-pointer mr-4">
                         <img src="/public/img/logo/Progress.svg" alt="course_create">
                         <h1 class=" font-semibold text-xl text-center text-white mt-3">Прогресс</h1>

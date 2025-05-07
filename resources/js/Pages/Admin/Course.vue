@@ -85,7 +85,7 @@ export default{
                     <p class=" mt-4 mb-3 text-gray-500">Ваши тесты</p>
                     <div class=" flex flex-wrap">
                         <div v-for="(elem, index) in this.tests" :key="elem">
-                            <div class=" w-[174px] min-h-16 border-2 border-gray-400 rounded-md p-3 cursor-pointer ml-5 mb-3 hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
+                            <div class="truncate w-[174px] min-h-16 border-2 border-gray-400 rounded-md p-3 cursor-pointer ml-5 mb-3 hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
                                 <h1 class="font-semibold text-lg">{{elem.test_name}}</h1>
                                 <p @click.prevent="deleteTest(index, elem.id)" class=" text-red-600 ">Удалить тест</p>
                             </div>

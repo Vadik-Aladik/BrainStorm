@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\CourseRequest;
 use App\Http\Requests\Admin\TestRequest;
+use App\Http\Requests\CheckUserTestRequest;
+use App\Http\Requests\User\UserTestRequest;
 use App\Http\Resources\Admin\CourseResource;
 use App\Models\Answer;
 use App\Models\Course;
@@ -11,6 +13,7 @@ use App\Models\Question;
 use App\Models\Student;
 use App\Models\Test;
 use App\Models\User;
+use App\Models\UserAnswer;
 use App\Models\UserTest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -116,8 +119,10 @@ class AdminController extends Controller
     public function mainPost()
     {
         $course = Course::where("user_id", auth()->id())->get();
-        $resource = CourseResource::collection($course);
+        $resource = CourseResource::collection($course); 
+        // $students = Student::with(['user', 'curs'])->get();
         return response()->json( [
+            // 'students' => $students,
             'course' => $course,
             'resource_course' => $resource,
             'auth' => auth()->check()
@@ -181,11 +186,11 @@ class AdminController extends Controller
 
     public function progressData()
     {
-        // $testForCheck = Test::where('check', true)->with(['testStudent', 'userTest.answerGet'])->get();
         $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
-        // $testForCheck = Test::where('check', true)->with('testStudent.answerGet')->get();
+        // $courseWithTests = Course::with('course.testStudent.userGet')->get();
         return response()->json([
             'course_for_check' => $testForCheck,
+            // 'courseWithTests' => $courseWithTests
         ]);
     }
 
@@ -194,7 +199,26 @@ class AdminController extends Controller
         $userTest = UserTest::where('user_id', $idUser)->where('test_id', $idTest)->with('answerGet')->get();
         return Inertia::render("Admin/CheckTest",[
             'id_test' => $idTest,
+            'user_id' => $idUser,
             'user_test' => $userTest,
+        ]);
+    }
+
+    public function checkTestPost(CheckUserTestRequest $request)
+    {
+        $data = $request->validated();
+        $arr=[];
+
+        $userTest = UserTest::where('user_id', $data['user_id'])->where('test_id', $data['test_id'])->first();
+        $userTest->update([
+            'score_student' => $data['score'],
+            'is_checked' => true,
+        ]);
+        foreach($data['answer_user'] as $answer){
+            $userAnswer = UserAnswer::where('test_id', $userTest->id)->where('answer_id', $answer['id'])->update(['status'=> $answer['status']]);
+        }
+        return response()->json([
+            "res" => true,
         ]);
     }
 }

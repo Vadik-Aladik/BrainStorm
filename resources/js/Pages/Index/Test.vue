@@ -111,6 +111,8 @@ export default{
                 // console.log(`Ваш результат ${this.true_answer} или ${(this.true_answer/this.answers.length)*100}%`);
                 let score = Math.round((this.true_answer/this.answers.length)*100);
 
+                console.log(this.answers);
+
                 const res = await axios.post('/test', {
                     course_id: this.id_course,
                     test_id: this.id_test,

@@ -35,6 +35,8 @@ Route::middleware([AuthCheck::class])->group(function(){
     Route::get('/test/{idCourse}/{idTest}', [App\Http\Controllers\IndexController::class, 'viewTest'])->name('student.test.view');
 
     Route::get('/personal', [App\Http\Controllers\AuthController::class, 'personal'])->name('student.personal');
+    Route::post('/personal', [App\Http\Controllers\AuthController::class, 'personalData']);
+    Route::post('/personal/change', [App\Http\Controllers\AuthController::class, 'personalDataChange']);
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('student.logout');
 
     Route::middleware([AdminCheck::class])->group(function(){
@@ -45,6 +47,7 @@ Route::middleware([AuthCheck::class])->group(function(){
         Route::post('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'createTestPost']);
 
         Route::get('/admin/checkTest/{idTest}/{idUser}', [App\Http\Controllers\AdminController::class, 'checkTest'])->name('admin.test.check');
+        Route::post('/admin/changeResult', [App\Http\Controllers\AdminController::class, 'checkTestPost']);
 
         Route::get('/admin/new/course', [App\Http\Controllers\AdminController::class, 'createCourse'])->name('admin.create.course');
         Route::post('/admin/new/course', [App\Http\Controllers\AdminController::class, 'createCoursePost']);
