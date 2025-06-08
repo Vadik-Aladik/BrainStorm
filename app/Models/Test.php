@@ -20,6 +20,11 @@ class Test extends Model
         return $this->hasMany(UserTest::class, 'test_id', 'id');
     }
 
+    public function cursProgress()
+    {
+        return $this->belongsTo(Course::class, 'course_id', 'id');
+    }
+
     // public function testStudent()
     // {
     //     return $this->hasMany(UserTest::class, 'test_id', 'id');

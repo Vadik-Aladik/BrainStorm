@@ -138,7 +138,7 @@ export default{
 <template>
     <div class=" py-[30px] bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 max-sm:text-xs">
+            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 ">
                 <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
 
                 <div v-for="(quest, key) in test.quest" :key="key" class=" flex mb-5">
@@ -171,7 +171,7 @@ export default{
                     </div>
                 </div>
 
-                <div class=" flex justify-end">
+                <div class=" flex justify-center lg:justify-end">
                     <button class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg" @click.prevent="checkUserTest">Завершить тест</button>
                 </div>
             </div>

@@ -6,7 +6,11 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        // 'eso': '350px', // Добавьте это, если используете кастомные брейкпоинты
+      },
+    },
   },
   plugins: [],
 }

@@ -94,43 +94,47 @@ export default{
 <template>
     <ComboComponent>
         <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]">
-            <div>
+            <div  class=" flex flex-col items-center min-[768px]:block">
                 <span class=" font-semibold text-xl">Ваши курсы</span>
                 <div class="flex flex-wrap mx-5 mt-3">
-                    <div v-for="elem in course" :key="elem">
-                        <Link :href="route('admin.course', elem.course_id)">
-                            <div class=" w-[173px] h-[173px] rounded-xl mr-4 p-4"
-                                :style="{
-                                    backgroundImage: `linear-gradient(to top, ${elem.course_color}, transparent), url(${elem.course_img})`,
-                                    backgroundSize: 'cover', 
-                                    backgroundPosition: 'center', 
-                                    backgroundRepeat: 'no-repeat'
-                                }">
-                                <div class=" flex flex-col items-end mt-[45%] text-white">
-                                    <h1 class=" font-semibold text-lg text-center mt-3 w-[100%]"> {{ elem.course_name }}</h1>
-                                    <p class=" text-sm mt-[10px]">Открыть>></p>
-                                </div>
-                            </div>
+                    <div class="flex flex-wrap w-[173px] min-[400px]:w-[378px] md:w-full">
+                        <Link :href="route('admin.create.course')" class=" w-[173px] h-[173px] rounded-xl bg-red-400 flex flex-col justify-center items-center cursor-pointer mr-4 mb-2 max-[399px]:mr-0">
+                            <img src="/public/img/logo/Course.svg" alt="course_create">
+                            <h1 class=" font-semibold text-xl text-center text-white mt-3">Добавить новый курс</h1>
                         </Link>
+                        <div v-for="elem in course" :key="elem">
+                            <Link :href="route('admin.course', elem.course_id)">
+                                <div class=" w-[173px] h-[173px] rounded-xl mr-4 p-4 mb-2 max-[399px]:mr-0"
+                                    :style="{
+                                        backgroundImage: `linear-gradient(to top, ${elem.course_color}, transparent), url(${elem.course_img})`,
+                                        backgroundSize: 'cover', 
+                                        backgroundPosition: 'center', 
+                                        backgroundRepeat: 'no-repeat'
+                                    }">
+                                    <div class=" flex flex-col items-end mt-[45%] text-white">
+                                        <h1 class=" font-semibold text-lg text-center mt-3 w-[100%]"> {{ elem.course_name }}</h1>
+                                        <p class=" text-sm mt-[10px]">Открыть>></p>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
                     </div>
-                    <Link :href="route('admin.create.course')" class=" w-[173px] h-[173px] rounded-xl bg-red-400 flex flex-col justify-center items-center cursor-pointer mr-4">
-                        <img src="/public/img/logo/Course.svg" alt="course_create">
-                        <h1 class=" font-semibold text-xl text-center text-white mt-3">Добавить новый курс</h1>
-                    </Link>
                 </div>
             </div>
 
-            <div class=" mt-8">
+            <div class=" mt-8 flex flex-col items-center min-[768px]:block">
                 <span class=" font-semibold text-xl">Другое</span>
                 <div class="flex flex-wrap mx-5 mt-3">
-                    <!-- <div class=" w-[173px] h-[173px] rounded-xl bg-green-400 flex flex-col justify-center items-center cursor-pointer mr-4">
-                        <img src="/public/img/logo/Student.svg" alt="course_create">
-                        <h1 class=" font-semibold text-xl text-center text-white mt-3">Студенты</h1>
-                    </div> -->
-                    <Link :href="route('admin.progress')" class=" w-[173px] h-[173px] rounded-xl bg-yellow-500 flex flex-col justify-center items-center cursor-pointer mr-4">
-                        <img src="/public/img/logo/Progress.svg" alt="course_create">
-                        <h1 class=" font-semibold text-xl text-center text-white mt-3">Прогресс</h1>
-                    </Link>
+                    <div class="flex flex-wrap w-[173px] min-[400px]:w-[378px] md:w-full">
+                        <!-- <div class=" w-[173px] h-[173px] rounded-xl bg-green-400 flex flex-col justify-center items-center cursor-pointer mr-4">
+                            <img src="/public/img/logo/Student.svg" alt="course_create">
+                            <h1 class=" font-semibold text-xl text-center text-white mt-3">Студенты</h1>
+                        </div> -->
+                        <Link :href="route('admin.progress')" class=" w-[173px] h-[173px] rounded-xl bg-yellow-500 flex flex-col justify-center items-center cursor-pointer mr-4 mb-2 max-[399px]:mr-0">
+                            <img src="/public/img/logo/Progress.svg" alt="course_create">
+                            <h1 class=" font-semibold text-xl text-center text-white mt-3">Прогресс</h1>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

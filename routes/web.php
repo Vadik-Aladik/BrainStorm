@@ -34,10 +34,14 @@ Route::middleware([AuthCheck::class])->group(function(){
 
     Route::get('/test/{idCourse}/{idTest}', [App\Http\Controllers\IndexController::class, 'viewTest'])->name('student.test.view');
 
+    Route::get('/progress', [App\Http\Controllers\IndexController::class, 'progress'])->name('student.progress');
+    Route::post('/progressPost', [App\Http\Controllers\IndexController::class, 'progressPost']);
+
     Route::get('/personal', [App\Http\Controllers\AuthController::class, 'personal'])->name('student.personal');
     Route::post('/personal', [App\Http\Controllers\AuthController::class, 'personalData']);
     Route::post('/personal/change', [App\Http\Controllers\AuthController::class, 'personalDataChange']);
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('student.logout');
+    Route::post('/deleteAcc', [App\Http\Controllers\AuthController::class, 'delete']);
 
     Route::middleware([AdminCheck::class])->group(function(){
         Route::get('/admin', [App\Http\Controllers\AdminController::class, 'main'])->name('admin.main'); // первая работа с получением данных с сторны фронта, используя асинхронные запрсы Post

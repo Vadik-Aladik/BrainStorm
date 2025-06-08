@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\UserTestRequest;
 use App\Http\Resources\Admin\CourseResource;
 use App\Http\Resources\Index\TestResource;
+use App\Http\Resources\Index\UserProgressResource;
 use App\Http\Resources\Index\UserResultResource;
 use App\Models\Course;
 use App\Models\Student;
@@ -26,30 +27,55 @@ class IndexController extends Controller
         $courseStudent = $res->pluck('curs')->sort();
         $resourceCourse = CourseResource::collection($courseStudent); 
         
-        $resultUser = UserTest::where('user_id', auth()->id())->with(['testGet', 'courseGet'])->get();
+        // $resultUser = UserTest::where('user_id', auth()->id())->with(['testGet', 'courseGet'])->limit(2)->get();
+        $resultUser = UserTest::where('user_id', auth()->id())->where('is_checked', 1)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->take(6)->get();
         $resourceResult = UserResultResource::collection($resultUser);
+
+        $checkUser = UserTest::where('user_id', auth()->id())->where('is_checked', 0)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->get();
+        $resourceCheck = UserResultResource::collection($checkUser);
+
+        // $progress = Student::where('student_id', auth()->id())->with(['curs.progress_user','curs.completeTest'])->get();
 
         return Inertia::render('Index/App', [
             'courses' => $resourceCourse,
             'result' => $resourceResult,
+            'check' => $resourceCheck,
         ]);
     }
 
     public function course($id)
     {
-        $course = Course::where('id', $id)->with('course')->get();
-        return Inertia::render('Index/Course', [
-            'course_admin' => $course
-        ]);
+        if(Course::where('id', $id)->count() <= 0){
+            return redirect()->route('student.index');
+        }
+        else{
+            $completeTest = UserTest::where('user_id', auth()->id())->pluck('test_id');
+            $course = Course::where('id', $id)->with(['completeTest', 'allTest'])->get();
+            return Inertia::render('Index/Course', [
+                'course_admin' => $course,
+                'complete_test' => $completeTest, // delete?
+            ]);
+        }
     }
 
     public function test($id, $idTest)
     {
         // $testCourse = Test::where('id', $idTest)->with('quest.answer')->get();
-        return Inertia::render('Index/Test', [
-            'id_course' => $id,
-            'id_test' => $idTest,
-        ]);
+        $completeTest = UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->exists();
+
+        if($completeTest){
+            return redirect()->route('student.course', ['id'=>$id]);
+        }
+        else if(Test::where('id', $idTest)->count() <= 0){
+            return redirect()->route('student.index');
+        }
+        else{
+            return Inertia::render('Index/Test', [
+                'id_course' => $id,
+                'id_test' => $idTest,
+            ]);
+        }
+        
     }
 
     public function testGet($idTest)
@@ -67,71 +93,6 @@ class IndexController extends Controller
         $textareaFlag = false;
 
         $test=Test::where('id', $data['test_id'])->get();
-
-        // foreach($data['answer_user'] as $answer){
-        //     if($answer['type'] == 'radio'){
-        //         // array_push($radio, ['quest_id'=>$answer['quest_id'], 'test_id'=>$data['test_id'], "answer_id"=>$answer['answers_id']]);
-        //         UserAnswer::create([
-        //             "test_id"=> $data['test_id'],
-        //             "quest_id"=> $answer['quest_id'],
-        //             "answer_id"=> $answer['answers_id'],
-        //             "answer" => null,
-        //             "status" => $answer['status'],
-        //         ]);
-        //     }
-        //     if($answer['type'] == 'checkbox'){
-        //         foreach($answer['answers_id'] as $check_answer){
-        //             // array_push($checkbox, ['quest_id'=>$answer['quest_id'], 'test_id'=>$data['test_id'], "answer_id"=>$check_answer]);
-        //             UserAnswer::create([
-        //                 "test_id"=> $data['test_id'],
-        //                 "quest_id"=> $answer['quest_id'],
-        //                 "answer_id"=> $check_answer,
-        //                 "answer" => null,
-        //                 "status" => $answer['status'],
-        //             ]);
-        //         }
-        //     }
-        //     if($answer['type'] == 'input'){
-        //         // array_push($input, ['quest_id'=>$answer['quest_id'], 'test_id'=>$data['test_id'], "answer_id"=>$answer['answers_id'], "answer" => $answer['user_answers']]);
-        //         UserAnswer::create([
-        //             "test_id"=> $data['test_id'],
-        //             "quest_id"=> $answer['quest_id'],
-        //             "answer_id"=> $answer['answers_id'],
-        //             "answer" => $answer['user_answers'],
-        //             "status" => $answer['status'],
-        //         ]);
-        //     }
-        //     if($answer['type'] == 'textarea'){
-        //         // array_push($textarea, ['quest_id'=>$answer['quest_id'], 'test_id'=>$data['test_id'], "answer_id"=>$answer['answers_id'], "answer" => $answer['user_answers']]);
-        //         $textareaFlag = true;
-        //         UserAnswer::create([
-        //             "test_id"=> $data['test_id'],
-        //             "quest_id"=> $answer['quest_id'],
-        //             "answer_id"=> $answer['answers_id'],
-        //             "answer" => $answer['user_answers'],
-        //             "status" => $answer['status'],
-        //         ]);
-        //     }
-        // }
-
-        // if($textareaFlag){
-        //     UserTest::create([
-        //         "user_id" => auth()->id(),
-        //         "course_id" => $data['course_id'],
-        //         "test_id" => $data['test_id'],
-        //         "score_student" => $data['score'],
-        //         "is_checked" => false,
-        //     ]);
-        // }
-        // else{
-        //     UserTest::create([
-        //         "user_id" => auth()->id(),
-        //         "course_id" => $data['course_id'],
-        //         "test_id" => $data['test_id'],
-        //         "score_student" => (string) $data['score'],
-        //         "is_checked" => true,
-        //     ]);
-        // }
 
         $userTest = UserTest::create([
             "user_id" => auth()->id(),
@@ -210,6 +171,22 @@ class IndexController extends Controller
             'id_course' => $idCourse,
             'id_test' => $idTest,
             'user_test' => $userTest,
+        ]);
+    }
+
+    public function progress()
+    {
+        return Inertia::render("Index/Progress");
+    }
+
+    public function progressPost()
+    {
+        //Ресурс для прогресса
+        $progressUser = Student::where('student_id', auth()->id())->with(['curs.progress_user','curs.completeTest'])->get();
+        $progress = UserProgressResource::collection($progressUser->pluck('curs'));
+
+        return response()->json([
+            'user_progress' => $progress
         ]);
     }
 }

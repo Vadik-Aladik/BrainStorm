@@ -67,27 +67,28 @@ export default{
 
 <template>
     <ComboComponent>
-        <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]">
-            <div class="flex items-center justify-center">
+        <!-- <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]"> -->
+        <div class=" py-[30px] px-4 min-[490px]:px-[77px] bg-white rounded-xl min-h-[780px]">
+            <div class="flex items-center justify-center max-[525px]:flex-col">
                 <h1 class=" font-semibold text-2xl text-center">{{ name }}</h1>
-                <button @click.prevent="modalFun" class="px-[30px] py-[10px] hover:bg-blue-200 hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in ">Настроить студентов</button>
+                <button @click.prevent="modalFun" class="px-[30px] py-[10px] hover:bg-blue-200 
+                hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100 ml-5 max-[525px]:ml-0">Настроить студентов</button>
             </div>
-            <div class=" overflow-auto h-[678px]">
-                <!-- <Link :href="route('admin.create.test')" class=" w-[174px] min-h-16 border-2 border-gray-400 rounded-md p-3 font-semibold cursor-pointer text-lg hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
-                    Создать новый тест
-                </Link> -->
 
-                <Link :href="route('admin.create.test', id)">
-                    <div class=" w-[174px] min-h-16 border-2 border-gray-400 rounded-md p-3 font-semibold cursor-pointer text-lg hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">Создать новый тест</div>
-                </Link>
+            <div class="min-h-[678px] mt-5">
+                <div class="mt-3 flex flex-col items-center md:items-start min-[450px]:items-normal mx-5">
+                    <Link :href="route('admin.create.test', id)" class="truncate group w-[186px] xl:w-[208px] min-h-16 border-2 border-gray-400 rounded-md p-3 cursor-pointer mr-1 xl:mr-2 mb-[10px] hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
+                        <div class="font-semibold text-lg truncate text-wrap">Создать новый тест</div>
+                    </Link>
+                </div>
 
-                <div class="">
-                    <p class=" mt-4 mb-3 text-gray-500">Ваши тесты</p>
-                    <div class=" flex flex-wrap">
+                <div class=" mt-3 flex flex-col items-center md:items-start min-[450px]:items-normal">
+                    <p class=" mb-2 mx-auto md:mx-0 text-gray-500">Ваши тесты</p>
+                    <div class="flex flex-wrap w-[186px] min-[450px]:w-[380px] mx-5 md:w-full">
                         <div v-for="(elem, index) in this.tests" :key="elem">
-                            <div class="truncate w-[174px] min-h-16 border-2 border-gray-400 rounded-md p-3 cursor-pointer ml-5 mb-3 hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
-                                <h1 class="font-semibold text-lg">{{elem.test_name}}</h1>
-                                <p @click.prevent="deleteTest(index, elem.id)" class=" text-red-600 ">Удалить тест</p>
+                            <div class="truncate group w-[186px] xl:w-[208px] min-h-16 border-2 border-gray-400 rounded-md p-3 cursor-pointer mr-1 xl:mr-2 mb-[10px] hover:border-blue-600 hover:bg-blue-300 hover:text-blue-600 transition ease-in">
+                                <h1 class="font-semibold text-lg truncate">{{elem.test_name}}</h1>
+                                <p @click.prevent="deleteTest(index, elem.id)" class=" text-red-600 group-hover:text-blue-600">Удалить тест</p>
                             </div>
                         </div>
                     </div>
@@ -98,7 +99,7 @@ export default{
 
     <div v-if="modalFlag">
         <div class=" bg-black bg-opacity-50 h-full w-full flex items-center justify-center fixed top-0 left-0 text-lg">
-            <div class=" min-w-[400px] py-8 px-4 bg-white rounded-md">
+            <div class=" min-w-[400px] max-[490px]:min-w-[320px] max-[490px]:px-4 py-8 px-[77px] bg-white rounded-md">
                 <h1 class=" font-bold text-center mb-5">Студенты курса</h1>
                 <!-- <div class="flex items-center min-h-[30px]">
                     <input class="focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[30px] w-[330px] pl-[10px]" type="text">
@@ -157,7 +158,7 @@ export default{
                 </div>
 
                 <div class=" flex justify-end">
-                    <button class=" px-[30px] py-[10px] hover:bg-blue-200 hover:text-blue-600 rounded-md mt-8" @click.prevent="modalFlag=!modalFlag">Закрыть</button>
+                    <button class=" px-[30px] py-[10px] hover:bg-blue-200 hover:text-blue-600 rounded-md mt-8 bg-gray-100" @click.prevent="modalFlag=!modalFlag">Закрыть</button>
                 </div>
             </div>
         </div>

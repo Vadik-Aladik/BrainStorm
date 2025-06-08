@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\CourseRequest;
 use App\Http\Requests\Admin\TestRequest;
 use App\Http\Requests\CheckUserTestRequest;
 use App\Http\Requests\User\UserTestRequest;
+use App\Http\Resources\Admin\AdminProgressResource;
 use App\Http\Resources\Admin\CourseResource;
 use App\Models\Answer;
 use App\Models\Course;
@@ -108,12 +109,6 @@ class AdminController extends Controller
 
     public function main()
     {
-        // $course = Course::where("user_id", auth()->id())->get();
-        // $resource = CourseResource::collection($course);
-        // return Inertia::render('Admin/Main', [
-        //     'course' => $course,
-        //     'resource_course' => $resource,
-        // ]);
          return Inertia::render('Admin/Main');
     }
     public function mainPost()
@@ -131,13 +126,8 @@ class AdminController extends Controller
 
     public function course($id)
     {
-        // $name=Course::where("id", $id)->get();
-        // $testsCourse = Test::where('course_id', $id)->get();
         return Inertia::render("Admin/Course", [
             'course_id' => $id,
-            // 'tests' => $testsCourse,
-            // 'name' => $name[0]['course_name'],
-            // 'id'=>$name[0]['id'],
         ]);
     }
 
@@ -186,11 +176,14 @@ class AdminController extends Controller
 
     public function progressData()
     {
-        $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
-        // $courseWithTests = Course::with('course.testStudent.userGet')->get();
+        // $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
+        // $countStudentCourse = Course::with('countStudentCourse')->withCount(['countStudentCourse'])->get();
+        $courseTest = Course::with('course.testStudent.userGet')->withCount(['countStudentCourse'])->get();
+        $courseWithTests = AdminProgressResource::collection($courseTest);
         return response()->json([
-            'course_for_check' => $testForCheck,
-            // 'courseWithTests' => $courseWithTests
+            // 'course_for_check' => $testForCheck,
+            // 'countStudentCourse' => $countStudentCourse,
+            'courseWithTests' => $courseWithTests
         ]);
     }
 

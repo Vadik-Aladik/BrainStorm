@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
             'email.required' => 'Поле пустое',
             'email.string' => 'Поле должно содержать строку',
             'email.email' => 'Вы не ввели электронную почту',
-            'email.exists' => 'Данной почтв не существует',
+            'email.exists' => 'Данной почты не существует',
             'password.required' => 'Поле пустое',
             'password.string' => 'Поле должно содержать строку',
             'password.min' => 'Минимальное количество символов - 8',

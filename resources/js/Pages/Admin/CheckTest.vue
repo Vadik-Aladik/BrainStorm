@@ -97,51 +97,58 @@ export default{
 <template>
     <div class=" py-[30px] bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 max-sm:text-xs">
-                <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
+            <!-- <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] "> -->
+            <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center">
+                <div>
+                    <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
 
-                <div v-for="(quest, key) in test.quest" :key="key" class=" flex mb-5">
-                    <span class=" font-semibold text-blue-600">{{ key+1 }}.</span>
-                    <div class="ml-2">
-                        <div class="font-semibold">{{quest.quest_text}}</div>
-                        <div v-for="(questAnswer, keyAnswer) in quest.answer" :key="keyAnswer">
-                            <div v-if="questAnswer.type == 'radio'">
-                                <div class=" flex items-center mb-1"> 
-                                    <input type="radio" :name="'text'+key" :value="questAnswer.status" id="" disabled :checked="checkAnswers(questAnswer.id)">
-                                    <label class=" ml-2" for="">{{ questAnswer.answer_text }}</label>
+                    <div v-for="(quest, key) in test.quest" :key="key" class=" flex mb-5">
+                        <span class=" font-semibold text-blue-600">{{ key+1 }}.</span>
+                        <div class="ml-2">
+                            <div class="font-semibold">{{quest.quest_text}}</div>
+                            <div v-for="(questAnswer, keyAnswer) in quest.answer" :key="keyAnswer">
+                                <div v-if="questAnswer.type == 'radio'">
+                                    <div class=" flex items-center mb-1"> 
+                                        <input type="radio" :name="'text'+key" :value="questAnswer.status" id="" disabled :checked="checkAnswers(questAnswer.id)">
+                                        <label class=" ml-2" for="">{{ questAnswer.answer_text }}</label>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div v-if="questAnswer.type == 'checkbox'">
-                                <div class=" flex items-center mb-1">
-                                    <input type="checkbox" :name="'text'+key" :value="questAnswer.status" id="" disabled :checked="checkAnswers(questAnswer.id)">
-                                    <label class=" ml-2" for="">{{ questAnswer.answer_text }}</label>
+                                <div v-if="questAnswer.type == 'checkbox'">
+                                    <div class=" flex items-center mb-1">
+                                        <input type="checkbox" :name="'text'+key" :value="questAnswer.status" id="" disabled :checked="checkAnswers(questAnswer.id)">
+                                        <label class=" ml-2" for="">{{ questAnswer.answer_text }}</label>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div v-if="questAnswer.type == 'input'" class=" flex">
-                                <input :value="this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer" type="text" class=" mt-1 focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[30px] w-[363px] pl-[10px] max-sm:w-[250px]" :name="'text'+key" id="" placeholder="Введите ответ" disabled>
-                                <div>
-                                    <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
-                                    <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
+                                <div v-if="questAnswer.type == 'input'" class=" flex max-lg:flex-col max-lg:mt-2">
+                                    <input :value="this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer" type="text" class=" mt-1 focus:outline-none focus:border-2 
+                                    focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[30px] w-[363px] pl-[10px] max-sm:w-[250px]" :name="'text'+key" id="" placeholder="Введите ответ" disabled>
+                                    <div class=" max-[350px]:flex-col">
+                                        <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
+                                        <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div v-if="questAnswer.type == 'textarea'" class=" flex">
-                                <textarea class=" mt-1 focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[150px] w-[363px] pl-[10px] resize-none max-sm:w-[250px]" :name="'text'+key" id="" disabled placeholder="Введите ответ">{{ this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer }}</textarea>
-                                <div>
-                                    <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
-                                    <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
+                                <div v-if="questAnswer.type == 'textarea'" class=" flex max-lg:flex-col max-lg:mt-2">
+                                    <textarea class=" mt-1 focus:outline-none focus:border-2 
+                                    focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[150px] w-[363px] pl-[10px] resize-none max-sm:w-[250px]" 
+                                    :name="'text'+key" id="" disabled placeholder="Введите ответ">{{ this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer }}</textarea>
+                                    <div class=" max-[350px]:flex-col">
+                                        <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
+                                        <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
 
-                <div class=" flex justify-between">
-                    <Link :href="route('admin.progress')" class=" py-[6px] px-[20px] rounded hover:bg-blue-200 hover:text-blue-600 transition ease-in ml-5 text-lg">Закрыть</Link>
+                <div class=" flex justify-between max-md:flex-col ">
+                    <Link :href="route('admin.progress')" class=" py-[6px] px-[20px] rounded hover:bg-blue-200 text-center hover:text-blue-600 transition ease-in ml-5 text-lg max-md:my-5 max-md:ml-0">Закрыть</Link>
                     <!-- <Link :href="route('admin.progress')" class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg">Сохранить</Link> -->
-                    <button @click.prevent="postRes" class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg">Сохранить</button>
+                    <button @click.prevent="postRes" class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg max-md:ml-0">Сохранить</button>
                 </div>
             </div>
         </div>

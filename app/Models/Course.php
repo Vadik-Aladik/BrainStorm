@@ -15,6 +15,30 @@ class Course extends Model
         return $this->hasMany(Test::class, 'course_id', 'id');
     }
 
+    public function completeTest()
+    {
+        return $this->hasMany(Test::class, 'course_id', 'id')->whereHas('testStudent', function($q) {
+            $q->where('user_id', auth()->id());
+        });
+    }
+
+    public function allTest()
+    {
+        return $this->hasMany(Test::class, 'course_id', 'id')->whereDoesntHave('testStudent', function($q) {
+            $q->where('user_id', auth()->id());
+        });
+    }
+
+    public function progress_user()
+    {
+        return $this->hasMany(UserTest::class, 'course_id', 'id')->where('user_id', auth()->id());
+    }
+
+    public function countStudentCourse()
+    {
+        return $this->hasMany(Student::class, 'course_id', 'id');
+    }
+
     // public function userCourse()
     // {
     //     return $this->hasMany(Student::class, 'id', 'course');

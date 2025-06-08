@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePersonalRequest;
+use App\Http\Requests\User\DeleteRequest;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\StoreRequest;
+use App\Http\Resources\Index\UserResultResource;
 use App\Models\User;
+use App\Models\UserTest;
+use Auth;
 use Hash;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,6 +19,11 @@ class AuthController extends Controller
     public function login()
     {
         return Inertia::render('User/Login');
+    }
+
+    public function registration()
+    {
+        return Inertia::render('User/Registration');
     }
     
     public function signin(LoginRequest $request)
@@ -28,11 +37,6 @@ class AuthController extends Controller
         return response()->json([
             'login' => false
         ]);
-    }
-
-    public function registration()
-    {
-        return Inertia::render('User/Registration');
     }
 
     public function store(StoreRequest $request)
@@ -67,8 +71,13 @@ class AuthController extends Controller
     public function personal()
     {
         $user = auth()->user();
+
+        $resultUser = UserTest::where('user_id', auth()->id())->where('is_checked', 1)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->take(9)->get();
+        $resourceResult = UserResultResource::collection($resultUser);
+
         return Inertia::render("User/Personal",[
-            "role"=>$user->role
+            "role"=>$user->role,
+            'result' => $resourceResult,
         ]);
     }
 
@@ -118,5 +127,25 @@ class AuthController extends Controller
         return response()->json([
             'logout'=>True
         ]);
+    }
+
+    public function delete(DeleteRequest $request)
+    {
+        $data = $request->validated();
+
+        if(Auth::attempt([
+            'email' => auth()->user()->email,
+            'password' => $data['password'],
+        ])){
+            User::find(auth()->id())->delete();
+            return response()->json([
+                'delete_account' => true
+            ]);
+        }
+        else{
+            return response()->json([
+                'delete_account' => false
+            ]);
+        }
     }
 }
