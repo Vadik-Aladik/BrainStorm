@@ -40,16 +40,44 @@ class AdminProgressResource extends JsonResource
         // ];
 
 
+        // return [
+        //     'course_id' => $this->id,
+        //     'course_name' => $this->course_name,
+        //     'count_student' => $this->count_student_course_count,
+        //     'course_tests' => $this->course->map(function($test){
+        //         return [
+        //             'test_id' => $test->id,
+        //             'test_name' => $test->test_name,
+        //             'check' => $test->check,
+        //             'test_students' => $test->testStudent->map(function($student){
+        //                 return [
+        //                     'student_id' => $student->user_id,
+        //                     'student_name' => $student->userGet->name,
+        //                     'student_email' => $student->userGet->email,
+        //                     'student_check' => $student->is_checked,
+        //                     'student_score' => $student->score_student,
+        //                 ];
+        //             }),
+        //         ];
+        //     })
+        // ];
+
         return [
             'course_id' => $this->id,
             'course_name' => $this->course_name,
             'count_student' => $this->count_student_course_count,
             'course_tests' => $this->course->map(function($test){
+                $idStudents = $this->countStudentCourse->pluck("student_id");
+                $idStudentsAvailable = $test->testStudent->filter(function($item) use ($idStudents){
+                    return $idStudents->contains($item->user_id);
+                });
+
                 return [
                     'test_id' => $test->id,
                     'test_name' => $test->test_name,
                     'check' => $test->check,
-                    'test_students' => $test->testStudent->map(function($student){
+                    // 'test_students' => $test->testStudent->map(function($student){
+                    'test_students' => $idStudentsAvailable->map(function($student){
                         return [
                             'student_id' => $student->user_id,
                             'student_name' => $student->userGet->name,

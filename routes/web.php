@@ -32,7 +32,7 @@ Route::middleware([AuthCheck::class])->group(function(){
     Route::post('/test/{idTest}/get', [App\Http\Controllers\IndexController::class, 'testGet'])->name('student.test.get');
     Route::post('/test', [App\Http\Controllers\IndexController::class, 'userTest']);
 
-    Route::get('/test/{idCourse}/{idTest}', [App\Http\Controllers\IndexController::class, 'viewTest'])->name('student.test.view');
+    Route::get('/test/{idTest}', [App\Http\Controllers\IndexController::class, 'viewTest'])->name('student.test.view');
 
     Route::get('/progress', [App\Http\Controllers\IndexController::class, 'progress'])->name('student.progress');
     Route::post('/progressPost', [App\Http\Controllers\IndexController::class, 'progressPost']);

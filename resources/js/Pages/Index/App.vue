@@ -12,12 +12,13 @@ export default{
         'courses',
         'result',
         'check',
+        'res',
         // 'test_progress',
         // 'course_user',
     ],
     mounted(){
-        console.log(this.courses);
-        console.log(this.result);
+        // console.log(this.courses);
+        console.log(this.res);
         // console.log(this.test_progress);
         // console.log(this.course_user);
     }
@@ -64,7 +65,7 @@ export default{
                         <span class="text-base my-1 text-gray-500">Проверенные</span>
                         <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal">
                             <div v-for="elem in result.data" :key="elem">
-                                <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
+                                <Link :href="route('student.test.view', elem.test_id)">
                                     <div v-if="elem.status && elem.score >= 80" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                         hover:border-green-700 hover:bg-green-200 hover:text-green-700 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
@@ -73,7 +74,7 @@ export default{
                                     </div>
                                 </Link>
                                 
-                                <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
+                                <Link :href="route('student.test.view', elem.test_id)">
                                     <div v-if="elem.status && (elem.score >= 35 && elem.score < 80)" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                         hover:border-yellow-600 hover:bg-yellow-200 hover:text-yellow-600 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
@@ -82,7 +83,7 @@ export default{
                                     </div>
                                 </Link>
                                 
-                                <Link :href="route('student.test.view', [elem.course_id, elem.test_id])">
+                                <Link :href="route('student.test.view', elem.test_id)">
                                     <div v-if="elem.status && elem.score <= 35" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                     hover:border-red-700 hover:bg-red-200 hover:text-red-700 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>

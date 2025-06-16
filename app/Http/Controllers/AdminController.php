@@ -178,11 +178,12 @@ class AdminController extends Controller
     {
         // $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
         // $countStudentCourse = Course::with('countStudentCourse')->withCount(['countStudentCourse'])->get();
-        $courseTest = Course::with('course.testStudent.userGet')->withCount(['countStudentCourse'])->get();
+        $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->get();
         $courseWithTests = AdminProgressResource::collection($courseTest);
         return response()->json([
             // 'course_for_check' => $testForCheck,
             // 'countStudentCourse' => $countStudentCourse,
+            'courseTestInfo' => $courseTest,
             'courseWithTests' => $courseWithTests
         ]);
     }

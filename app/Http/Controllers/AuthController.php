@@ -70,23 +70,19 @@ class AuthController extends Controller
 
     public function personal()
     {
-        $user = auth()->user();
-
-        $resultUser = UserTest::where('user_id', auth()->id())->where('is_checked', 1)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->take(9)->get();
-        $resourceResult = UserResultResource::collection($resultUser);
-
-        return Inertia::render("User/Personal",[
-            "role"=>$user->role,
-            'result' => $resourceResult,
-        ]);
+        return Inertia::render("User/Personal");
     }
 
     public function personalData()
     {
         $user=User::where('id', auth()->id())->get();
 
+        $resultUser = UserTest::where('user_id', auth()->id())->where('is_checked', 1)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->take(11)->get();
+        $resourceResult = UserResultResource::collection($resultUser);
+
         return response()->json([
             'user' => $user,
+            'result' => $resourceResult,
         ]);
     }
 

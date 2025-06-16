@@ -15,6 +15,7 @@ export default{
                         },
                     ]
                 }],
+            errors: [],
             test_name: '',
             input_error: '',
             quest_error: '',
@@ -43,9 +44,15 @@ export default{
                 test.answers.forEach(answer => {
                     answer.status = false;
                 });
+                test.answers[answerIndex].status = true;
+            }
+
+            if(test.select == 'checkbox'){
+                test.answers[answerIndex].status = !test.answers[answerIndex].status;
             }
         
-            test.answers[answerIndex].status = true;
+            // test.answers[answerIndex].status = true;
+            console.log(test);
         },
         pushTest(){
             this.tests.push({
@@ -70,52 +77,53 @@ export default{
             test.answers.splice(answerIndex, 1);
         },
         async createTest(){
+            this.errors = [];
             let isValid = true;
             this.tests.forEach((elem, index)=>{
                 let emptyAnswer = elem.answers.some(answer => !answer.answer);
                 let statusAnswer = elem.answers.some(answer => answer.status);
                 if(elem.select == 'radio' || elem.select == 'checkbox'){
                     if(!elem.quest){
-                        console.log(`${index} - не введен вопрос`);
-                        // this.quest_error = 'не введен вопрос'
+                        this.errors[index+1] = `${index+1} - не введен текст вопроса`;
                         isValid = false;
                     }
                     if(!elem.select){
-                        console.log(`${index} - не выбран тип ответа`);
-                        // this.input_error = 'не выбран тип ответа';
+                        this.errors[index+1] = `${index+1} - не выбран тип ответа`;
                         isValid = false;
                     }
                     if(emptyAnswer){
-                        console.log(`${index} - нет вписан вопрос`);
-                        // this.input_error = 'нет вписан вопрос';
+                        this.errors[index+1] = `${index+1} - не вписан текст вопрос`;
                         isValid = false;
                     }
                     if(elem.answers.length < 2){
-                        console.log(`${index} - минимальное количество вопрос 2`);
-                        // this.input_error = 'минимальное количество вопрос - 2';
+                        this.errors[index+1] = `${index+1} - минимальное количество вопрос - 2`;
                         isValid = false;
                     }
                     if(!statusAnswer){
-                        console.log(`${index} - не выбран варант ответа`);
-                        // this.input_error = 'не выбран варант ответа';
+                        this.errors[index+1] = `${index+1} - не выбран варант ответа`;
                         isValid = false;
                     }
                 }
                 else if(elem.select == 'input' || elem.select == 'textarea'){
                     if(!elem.quest){
-                        console.log(`${index} - не введен вопрос`);
+                        this.errors[index+1] = `${index+1} - не введен текст вопроса`;
                         isValid = false;
                     }
                     if(!elem.select){
-                        console.log(`${index} - не выбран тип ответа`);
+                        this.errors[index+1] = `${index+1} - не выбран тип ответа`;
                         isValid = false;
                     }
                 }
                 else{
-                    console.log('не выбран тип варианта вопроса');
+                    this.errors[index+1] = `${index+1} - не выбран тип варианта вопроса`;
                     isValid = false;
                 }
             });
+
+            if(this.test_name == ''){
+                this.errors[0] = `название теста не написано`;
+                isValid = false;
+            }
 
             if(isValid){
                 this.tests.forEach(elem => {
@@ -135,6 +143,7 @@ export default{
                     router.visit('/admin');
                 }
             }
+            console.log(this.errors);
         },
         // warningRed(){
         //     this.test.forEach((elem, index)=>{
@@ -151,11 +160,16 @@ export default{
     <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
             <!-- <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center"> -->
-            <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center">
+            <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[100px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center">
                 <div>
                     <div class=" mb-4 ">
                         <input v-model="test_name" type="text" class=" w-[382px] max-[400px]:w-72 h-[40px] pl-4 focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded mt-[5px] placeholder:font-light text-blue-600 font-bold" placeholder="Введите название курса">
-                        <p class=" text-red-600 text-sm hidden">Внимание! Если вы не введете ответ в поле ввода, вам придется проверять тест студента после его прохождения на вкладке “Проверить” на странице “Прогресс”</p>
+                        <!-- <p class=" text-red-600 text-sm hidden">Внимание! Если вы не введете ответ в поле ввода, вам придется проверять тест студента после его прохождения на вкладке “Проверить” на странице “Прогресс”</p> -->
+                        <div v-if="errors.length != 0" class=" text-red-600 text-sm border border-red-700 bg-red-200 w-[320px] p-4 rounded-md my-2 font-medium">
+                            <div class="min-w-1" v-for="elem in errors" :key="elem">
+                                {{ elem }}
+                            </div>
+                        </div>
                     </div>
                     <div v-for="(test, index) in tests" :key="index" class="max-md:mt-5">
                         <div class=" mb-[5px] flex max-md:mt-6">
@@ -219,7 +233,7 @@ export default{
 
                 <div class=" mt-[30px] flex justify-between max-md:flex-col-reverse">
                     <Link :href="route('admin.main')" class="py-[6px] px-[20px] rounded hover:bg-blue-200 hover:text-blue-600 transition ease-in ml-5 text-lg bg-gray-100 max-md:my-5">Вернуться назад</Link>
-                    <button class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg bg-gray-100" @click.prevent="createTest">Создать курс</button>
+                    <button class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg bg-gray-100" @click.prevent="createTest">Создать тест</button>
                 </div>
             </div>
         </div>

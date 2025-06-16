@@ -39,27 +39,24 @@ export default{
                 </nav>
 
                 <button @click.prevent="burgerWindow =! burgerWindow" class=" hidden max-[550px]:block">
-                    <svg width="63" height="48" viewBox="0 0 63 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="63" height="13" fill="#0077FF"/>
-                        <rect y="17" width="63" height="14" fill="#0077FF"/>
-                        <rect y="34" width="63" height="14" fill="#0077FF"/>
-                        </svg>
+                    <svg width="63" height="40" viewBox="0 0 63 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="63" height="6" fill="#0077FF"/>
+                    <rect y="17" width="63" height="6" fill="#0077FF"/>
+                    <rect y="34" width="63" height="6" fill="#0077FF"/>
+                    </svg>
                 </button>
             </div>
         </div>
     </header>
 
     <div v-if="burgerWindow" class=" h-full w-full fixed left-0 top-0 bg-white min-[550px]:hidden">
-        <!-- <nav class=" flex flex-col w-[200px] my-auto mx-auto text-center"> -->
         <div @click.prevent="burgerWindow =! burgerWindow" class=" h-28 flex items-center justify-end px-5">
-            <svg width="63" height="48" viewBox="0 0 63 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="63" height="13" fill="#0077FF"/>
-            <rect y="17" width="63" height="14" fill="#0077FF"/>
-            <rect y="34" width="63" height="14" fill="#0077FF"/>
+            <svg width="50" height="49" viewBox="0 0 50 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="44.5476" width="63" height="6" transform="rotate(-45 1 44.5476)" fill="#0077FF"/>
+            <rect x="5" y="-0.000244141" width="63" height="6" transform="rotate(45 5 -0.000244141)" fill="#0077FF"/>
             </svg>
         </div>
-        <!-- <nav class="flex flex-col justify-center w-[200px] my-auto mx-auto h-full text-center"> -->
-        <nav class="flex flex-col justify-evenly w-[200px] my-auto mx-auto h-[500px] text-center">
+        <nav class="flex flex-col justify-evenly w-[200px] my-auto mx-auto h-[400px] text-center">
             <Link class=" text-xl" :href="route('student.index')">Главная</Link>
             <Link class=" text-xl" :href="route('student.progress')">Прогресс</Link>
             <Link class=" text-xl" :href="route('student.personal')">Аккаунт</Link>

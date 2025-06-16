@@ -13,6 +13,7 @@ export default{
             // ],
             test: [],
             answers: [],
+            errors: [],
 
             true_answer:0,
         }
@@ -58,6 +59,7 @@ export default{
 
         // Валидация теста!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         async checkUserTest(){
+            this.errors = [];
             console.log(this.answers);
             this.true_answer=0;
             let isValid = true;
@@ -68,6 +70,7 @@ export default{
             if (this.answers.length === 0) {
                 isValid = false;
                 console.log("Вы не ответили ни на один вопрос!");
+                this.errors[0] = "Вы не ответили ни на один вопрос!";
             } else {
                 // Сама валидация
                 this.test.quest.forEach((quest, index) => {
@@ -79,7 +82,8 @@ export default{
                         (userAnswer.type === 'input' && userAnswer.user_answers === '') || 
                         (userAnswer.type === 'textarea' && userAnswer.user_answers === '')) {
                         isValid = false;
-                        console.log(index + 1, "Вы ответили не на все вопросы !!!");
+                        // console.log(index + 1, "Вы ответили не на все вопросы !!!");
+                        this.errors[index+1] = `${index+1} - Вы ответили не на все вопросы !!!`;
                     }
                 });
             }
@@ -127,6 +131,8 @@ export default{
                     router.visit('/');
                 }
             }
+
+            // router.visit("student.index");
         }
     },
     mounted(){
@@ -138,8 +144,14 @@ export default{
 <template>
     <div class=" py-[30px] bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 ">
+            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[100px] max-[460px]:px-4 ">
                 <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
+
+                <div v-if="errors.length != 0" class=" text-red-600 text-sm border border-red-700 bg-red-200 w-[310px] p-4 rounded-md my-2 font-medium">
+                    <div class="min-w-1" v-for="elem in errors" :key="elem">
+                        {{ elem }}
+                    </div>
+                </div>
 
                 <div v-for="(quest, key) in test.quest" :key="key" class=" flex mb-5">
                     <span class=" font-semibold text-blue-600">{{ key+1 }}.</span>

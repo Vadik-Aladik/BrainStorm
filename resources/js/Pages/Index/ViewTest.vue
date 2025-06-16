@@ -12,7 +12,6 @@ export default{
         Link
     },
     props:[
-        "id_course",
         "id_test",
         "user_test",
     ],
@@ -37,7 +36,7 @@ export default{
 <template>
     <div class=" py-[30px] bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 ">
+            <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[100px] max-sm:px-5 ">
                 <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
 
                 <div v-for="(quest, key) in test.quest" :key="key" class=" flex mb-5">

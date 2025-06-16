@@ -40,12 +40,13 @@ class IndexController extends Controller
             'courses' => $resourceCourse,
             'result' => $resourceResult,
             'check' => $resourceCheck,
+            'res' => $res
         ]);
     }
 
     public function course($id)
     {
-        if(Course::where('id', $id)->count() <= 0){
+        if(Course::where('id', $id)->count() <= 0 || Student::where('student_id', auth()->id())->where('course_id', $id)->count() <= 0){
             return redirect()->route('student.index');
         }
         else{
@@ -164,14 +165,18 @@ class IndexController extends Controller
         ]);
     }
 
-    public function viewTest($idCourse, $idTest)
+    public function viewTest($idTest)
     {
-        $userTest = UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->with('answerGet')->get();
-        return Inertia::render("Index/ViewTest", [
-            'id_course' => $idCourse,
-            'id_test' => $idTest,
-            'user_test' => $userTest,
-        ]);
+        if(UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->where('is_checked', true)->count() <= 0){
+            return redirect()->route('student.index');
+        }
+        else{
+            $userTest = UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->with('answerGet')->get();
+            return Inertia::render("Index/ViewTest", [
+                'id_test' => $idTest,
+                'user_test' => $userTest,
+            ]);
+        }
     }
 
     public function progress()
