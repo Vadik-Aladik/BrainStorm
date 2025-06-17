@@ -64,7 +64,7 @@ class IndexController extends Controller
         // $testCourse = Test::where('id', $idTest)->with('quest.answer')->get();
         $completeTest = UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->exists();
 
-        if($completeTest){
+        if($completeTest || !Test::where('id', $idTest)->where('course_id', $id)->exists()){
             return redirect()->route('student.course', ['id'=>$id]);
         }
         else if(Test::where('id', $idTest)->count() <= 0){

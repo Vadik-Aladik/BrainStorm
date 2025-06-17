@@ -125,7 +125,7 @@ export default{
                                 <div v-if="questAnswer.type == 'input'" class=" flex max-lg:flex-col max-lg:mt-2">
                                     <input :value="this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer" type="text" class=" mt-1 focus:outline-none focus:border-2 
                                     focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[30px] w-[363px] pl-[10px] max-sm:w-[250px]" :name="'text'+key" id="" placeholder="Введите ответ" disabled>
-                                    <div class=" max-[350px]:flex-col mt-2">
+                                    <div class=" max-[350px]:flex-col max-[350px]:mt-2">
                                         <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
                                         <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
                                     </div>
@@ -135,7 +135,7 @@ export default{
                                     <textarea class=" mt-1 focus:outline-none focus:border-2 
                                     focus:border-blue-800 border-2 border-gray-400 rounded placeholder:font-light h-[150px] w-[363px] pl-[10px] resize-none max-sm:w-[250px]" 
                                     :name="'text'+key" id="" disabled placeholder="Введите ответ">{{ this.user_test[0].answer_get.find((elem)=>elem.answer_id==questAnswer.id)?.answer }}</textarea>
-                                    <div class=" max-[350px]:flex-col mt-2">
+                                    <div class=" max-[350px]:flex-col max-[350px]:mt-2">
                                         <button @click.prevent="changeStatusAnswer(key, true)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-green-200 hover:text-green-600 rounded-md">Верно</button>
                                         <button @click.prevent="changeStatusAnswer(key, false)" class="ml-4 max-[350px]:ml-0 px-[30px] py-[5px] hover:bg-red-200 hover:text-red-600 rounded-md">Не верно</button>
                                     </div>
