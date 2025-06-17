@@ -5,12 +5,6 @@ import { router } from '@inertiajs/vue3';
 export default{
     data(){
         return{
-            // answers: [
-            //     {quest_id: 1, type:'radio', answers_id:0, status: 1},
-            //     {quest_id: 2, type:'checkbox', answers_id:[0,2,5]},
-            //     {quest_id: 3, type:'input', user_answers: "", correct_answer:""},
-            //     {quest_id: 4, type:'textarea', user_answers: ""},
-            // ],
             test: [],
             answers: [],
             errors: [],
@@ -26,7 +20,6 @@ export default{
         async testGet(){
             const res = await axios.post(`/test/${this.id_test}/get`);
             this.test = res.data.test[0];
-            console.log(res);
         },
 
         // ПРoвоеряет какие варианты ответов выбрал ПОЛЬЗОВАТЕЛЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -60,16 +53,12 @@ export default{
         // Валидация теста!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         async checkUserTest(){
             this.errors = [];
-            console.log(this.answers);
             this.true_answer=0;
             let isValid = true;
-
-            // console.log("length answer user - ", lengthAnswersTrue.length);
 
             //Сама валидация
             if (this.answers.length === 0) {
                 isValid = false;
-                console.log("Вы не ответили ни на один вопрос!");
                 this.errors[0] = "Вы не ответили ни на один вопрос!";
             } else {
                 // Сама валидация
@@ -82,7 +71,6 @@ export default{
                         (userAnswer.type === 'input' && userAnswer.user_answers === '') || 
                         (userAnswer.type === 'textarea' && userAnswer.user_answers === '')) {
                         isValid = false;
-                        // console.log(index + 1, "Вы ответили не на все вопросы !!!");
                         this.errors[index+1] = `${index+1} - Вы ответили не на все вопросы !!!`;
                     }
                 });
@@ -111,22 +99,15 @@ export default{
                         elem.status = 1;
                     }
                 });
-
-                // console.log(`Ваш результат ${this.true_answer} или ${(this.true_answer/this.answers.length)*100}%`);
                 let score = Math.round((this.true_answer/this.answers.length)*100);
-
-                console.log(this.answers);
 
                 const res = await axios.post('/test', {
                     course_id: this.id_course,
                     test_id: this.id_test,
                     answer_user: this.answers,
                     score: score
-                }).catch((error)=>{
-                    console.log(error);
                 });
 
-                console.log(res);
                 if(res || res.data.status){
                     router.visit('/');
                 }

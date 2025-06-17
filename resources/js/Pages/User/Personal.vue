@@ -26,7 +26,6 @@ export default{
         async logout(){
             const res = await axios.post('/logout');
 
-            console.log(res);
             if(res || res.data){
                 router.visit('/login');
             }
@@ -45,8 +44,6 @@ export default{
             }).catch((error)=>{
                 console.log(error);
             })
-
-            console.log(res);
         },
         async deleteAccountPost(){
             const res = await axios.post('/deleteAcc', {
@@ -58,8 +55,6 @@ export default{
             if(res && res.data.delete_account){
                 router.visit('/login');
             }
-
-            console.log(res);
         },
 
         deleteAcc(){

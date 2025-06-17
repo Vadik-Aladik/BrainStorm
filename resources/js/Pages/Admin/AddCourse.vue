@@ -20,9 +20,7 @@ export default{
             formData.append('name', this.nameCourse);
             formData.append('img', this.fileCourse);
             formData.append('color', this.colorCourse);
-            const res = await axios.post('/admin/new/course', formData).catch(error=>{
-                console.log(error);
-            });
+            const res = await axios.post('/admin/new/course', formData);
             if(res || res.data.status){
                 router.visit('/admin');
             }

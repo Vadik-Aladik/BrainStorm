@@ -50,9 +50,6 @@ export default{
             if(test.select == 'checkbox'){
                 test.answers[answerIndex].status = !test.answers[answerIndex].status;
             }
-        
-            // test.answers[answerIndex].status = true;
-            console.log(test);
         },
         pushTest(){
             this.tests.push({
@@ -131,27 +128,16 @@ export default{
                         elem.answers[0].answer = elem.answers[0].answer.toLowerCase().replace(/\s+/g, ' ').trim();
                     }
                 })
-                console.log(this.tests);
                 const res = await axios.post(`/admin/new/test/course/${this.course_id}`, {
                     test_name: this.test_name,
                     test: this.tests
-                }).catch(error=>{
-                    console.log(error);
                 });
                 
                 if(res || res.data.result){
                     router.visit('/admin');
                 }
             }
-            console.log(this.errors);
         },
-        // warningRed(){
-        //     this.test.forEach((elem, index)=>{
-        //         if(elem.select == 'input' || elem.select == 'textarea'){
-
-        //         }
-        //     });
-        // }
     }
 }
 </script>

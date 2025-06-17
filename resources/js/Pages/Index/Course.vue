@@ -10,11 +10,7 @@ export default{
     props:[
         'course_admin',
         'complete_test',
-    ],  
-    mounted(){
-        console.log(this.course_admin);
-        console.log(this.complete_test);
-    }
+    ], 
 }
 </script>
 

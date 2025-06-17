@@ -13,15 +13,7 @@ export default{
         'result',
         'check',
         'res',
-        // 'test_progress',
-        // 'course_user',
     ],
-    mounted(){
-        // console.log(this.courses);
-        console.log(this.res);
-        // console.log(this.test_progress);
-        // console.log(this.course_user);
-    }
 }
 </script>
 

@@ -27,12 +27,10 @@ export default{
                 password: this.password,
                 password_confirm: this.password_confirm,
             }).then((res)=>{
-                // console.log(res);
                 if(res && res.data.auth){
                     router.visit('/');
                 }
             }).catch((error)=>{
-                console.log(error);
                 this.name_error = error.response.data.errors.name;
                 this.email_error = error.response.data.errors.email;
                 this.password_error = error.response.data.errors.password;

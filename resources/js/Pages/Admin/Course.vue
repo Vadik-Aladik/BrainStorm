@@ -24,7 +24,6 @@ export default{
             if(deleteTestAgree){
                 this.tests.splice(index,1);
                 const res = await axios.post(route('admin.delete.test', id));
-                console.log(res); 
             }
         },
         async addStudent(idStudent, index){
@@ -39,7 +38,6 @@ export default{
         },
         async dataCourse(){
             const res = await axios.post(`/admin/course/${this.course_id}/data`);
-            console.log(res);
             this.name = res.data.course_name;
             this.id = res.data.course_id;
             this.tests = res.data.tests;

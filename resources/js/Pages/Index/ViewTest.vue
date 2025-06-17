@@ -19,7 +19,6 @@ export default{
         async testGet(){
             const res = await axios.post(`/test/${this.id_test}/get`);
             this.test = res.data.test[0];
-            console.log(res);
         },
 
         checkAnswers(id_answer){
@@ -28,7 +27,6 @@ export default{
     },
     mounted(){
         this.testGet();
-        console.log(this.user_test[0].answer_get);
     }
 }
 </script>

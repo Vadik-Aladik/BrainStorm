@@ -25,10 +25,7 @@ export default{
                 email: this.email,
                 password: this.password
             }).catch((error)=>{
-                console.log(error);
                 this.errors = error.response.data.errors;
-                // this.email_error = error.response.data.errors.email;
-                // this.password_error = error.response.data.errors.password;
             });
 
             if(res && res.data.login){

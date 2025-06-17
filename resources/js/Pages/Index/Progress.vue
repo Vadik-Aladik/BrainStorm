@@ -14,11 +14,8 @@ export default{
     },
     methods:{
         async getUserProcces(){
-            const res = await axios.post('/progressPost').catch((error)=>{
-                console.log(error);
-            });
+            const res = await axios.post('/progressPost');
             this.progress = res.data.user_progress;
-            console.log(res);
         }
     },
     mounted(){
