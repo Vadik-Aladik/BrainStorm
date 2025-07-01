@@ -153,6 +153,13 @@ export default{
                         </Link>
                     </div>
                 </div>
+                <div v-else>
+                    <div class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate mx-5 mt-3">
+                        <span class="text-ellipsis overflow-hidden font-semibold text-xl">Ваши тесты</span>
+                        <p class=" text-sm truncate"></p>
+                        <div class="font-semibold text-xl text-gray-500 text-end">Ваши результаты</div>
+                    </div>
+                </div>
             </div>
         </div>
     </ComboComponent>

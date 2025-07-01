@@ -14,6 +14,11 @@ export default{
         'check',
         'res',
     ],
+
+    // mounted(){
+    //     console.log(this.result.data);
+    //     console.log(this.check.data);
+    // }
 }
 </script>
 
@@ -53,12 +58,14 @@ export default{
             
             <div class=" mt-8 flex flex-col items-center min-[768px]:block">
                 <span class=" font-semibold text-xl">Ваши результы</span>
-                    <div v-if="result.data.length > 0" class="flex flex-col items-center min-[768px]:block">
-                        <span class="text-base my-1 text-gray-500">Проверенные</span>
-                        <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal">
+                    <!-- <div v-if="result.data.length > 0" class="flex flex-col items-center min-[768px]:block"> -->
+                    <div v-if="result.data.length > 0">
+                        <div class="text-base my-1 text-gray-500 max-[768px]:text-center">Проверенные</div>
+                        <!-- <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal"> -->
+                        <div class="flex flex-wrap mx-5 max-[768px]:mx-auto max-[768px]:w-[360px] max-[399px]:flex-col max-[399px]:items-center">
                             <div v-for="elem in result.data" :key="elem">
                                 <Link :href="route('student.test.view', elem.test_id)">
-                                    <div v-if="elem.status && elem.score >= 80" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
+                                    <div v-if="elem.status && elem.score >= 80" class="max-lg:w-44 w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                         hover:border-green-700 hover:bg-green-200 hover:text-green-700 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm truncate">{{elem.name_course}}</p>
@@ -67,7 +74,7 @@ export default{
                                 </Link>
                                 
                                 <Link :href="route('student.test.view', elem.test_id)">
-                                    <div v-if="elem.status && (elem.score >= 35 && elem.score < 80)" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
+                                    <div v-if="elem.status && (elem.score >= 35 && elem.score < 80)" class="max-lg:w-44 w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                         hover:border-yellow-600 hover:bg-yellow-200 hover:text-yellow-600 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm truncate">{{elem.name_course}}</p>
@@ -76,7 +83,7 @@ export default{
                                 </Link>
                                 
                                 <Link :href="route('student.test.view', elem.test_id)">
-                                    <div v-if="elem.status && elem.score <= 35" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
+                                    <div v-if="elem.status && elem.score <= 35" class="max-lg:w-44 w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
                                     hover:border-red-700 hover:bg-red-200 hover:text-red-700 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer truncate">
                                         <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                         <p class=" text-sm truncate">{{elem.name_course}}</p>
@@ -87,13 +94,13 @@ export default{
                         </div>
                     </div>
                 
-                <div v-if="result.data.length > 0">
+                <div v-if="check.data.length > 0">
                     <div class=" mt-3 flex flex-col items-center min-[768px]:block">
-                        <span class="text-base my-1 text-gray-500">На проверке</span>
-                        <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal">
+                        <div class="text-base my-1 text-gray-500 max-[768px]:text-center">На проверке</div>
+                        <div class="flex flex-wrap mx-5 max-[768px]:mx-auto max-[768px]:w-[360px] max-[399px]:flex-col max-[399px]:items-center">
                             <div v-for="elem in check.data" :key="elem">
                                 <div v-if="elem.status==false" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
-                                hover:border-blue-600 hover:bg-blue-200 hover:text-blue-600 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer group truncate">
+                                hover:border-blue-600 hover:bg-blue-200 hover:text-blue-600 transition ease-in mr-1 xl:mr-[16px] mb-[10px] cursor-pointer group truncate max-lg:w-44">
                                     <span class="text-ellipsis overflow-hidden font-semibold text-xl">{{elem.name_test}}</span>
                                     <p class=" text-sm truncate">{{elem.name_course}}</p>
                                     <div class="font-semibold text-xl text-gray-500 text-end group-hover:text-blue-600">На проверке</div>

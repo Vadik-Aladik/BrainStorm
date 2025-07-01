@@ -6,19 +6,22 @@ export default{
     data(){
         return{
             modalFlag: false,
-            test_course: this.tests,
+            flagLoadCourse: false,
+            flagLoadStudent: false,
+            flagLoadStudentCourse: false,
+            // test_course: this.tests,
 
             name: null,
             id: 0,
-            tests: null,
+            page: 1,
+            pageStudents: 1,
+            pageStudentsCourse: 1,
+            tests: [],
             students:[],
             student_course:[],
         }
     },
     methods:{
-        modalFun(){
-            return this.modalFlag = !this.modalFlag;
-        },
         async deleteTest(index, id){
             const deleteTestAgree = confirm ("Вы уверены что хоитие удалить тест");
             if(deleteTestAgree){
@@ -37,18 +40,63 @@ export default{
             const res = await axios.post(`/admin/delete_student/${idStudent}/course/${this.id}`);
         },
         async dataCourse(){
-            const res = await axios.post(`/admin/course/${this.course_id}/data`);
+            const res = await axios.post(`/admin/course/${this.course_id}/data?page=${this.page}`);
+            // this.result = res;
             this.name = res.data.course_name;
             this.id = res.data.course_id;
-            this.tests = res.data.tests;
-            this.students = res.data.users_for_add;
-            this.student_course = res.data.users_in_course;
+            this.tests.push(...res.data.tests.data);
 
-            this.students = this.students.filter((item) => !this.student_course.some(elem=> elem.id === item.id))
-            // this.students = this.students.filter((item) => 
-            // !this.student_course.some(elem => elem.id === item.id)
-            // );
-        }
+            // this.students = res.data.users_for_add;
+            // this.student_course = res.data.users_in_course;
+
+            this.students = this.students.filter((item) => !this.student_course.some(elem=> elem.id === item.id));
+            
+            ++this.page;
+            if(res.data.tests.next_page_url == null){
+                return this.flagLoadCourse = true;
+            }
+        },
+        async dataStudents(){
+            const res = await axios.post(`/admin/course/${this.course_id}/dataStudents?page=${this.pageStudents}`);
+            this.students.push(...res.data.users_for_add.data);
+
+            ++this.pageStudents;
+            if(res.data.users_for_add.next_page_url == null){
+                return this.flagLoadStudent = true;
+            }
+        },
+        async dataStudentsCourse(){
+            const res = await axios.post(`/admin/course/${this.course_id}/dataStudentsCourse?page=${this.pageStudentsCourse}`);
+            this.student_course.push(...res.data.users_in_course);
+            console.log(res);
+
+            ++this.pageStudentsCourse;
+            if(res.data.users_in_course.length == 0){
+                return this.flagLoadStudentCourse = true;
+            }
+        },
+        scrollStudent(event){
+            const el = event.target;
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 1) {
+                if(!this.flagLoadStudent){
+                    this.dataStudents();
+                }
+            }
+        },
+        scrollStudentCourse(event){
+            const el = event.target;
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 1) {
+                if(!this.flagLoadStudentCourse){
+                    this.dataStudentsCourse();
+                }
+                // this.dataStudentsCourse();
+            }
+        },
+        modalFun(){
+            this.modalFlag = !this.modalFlag;
+            this.dataStudents();
+            this.dataStudentsCourse();
+        },
     },
     props:[
         'course_id'
@@ -90,6 +138,10 @@ export default{
                             </div>
                         </div>
                     </div>
+                    <div class=" flex justify-end w-full">
+                        <button v-if="!flagLoadCourse" @click.prevent="dataCourse()" class="px-[30px] py-[10px] hover:bg-blue-200 
+                    hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100">Загрузить еще...</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,8 +151,7 @@ export default{
         <div class=" bg-black bg-opacity-50 h-full w-full flex items-center justify-center fixed top-0 left-0 text-lg">
             <div class=" min-w-[400px] max-[490px]:min-w-[320px] max-[490px]:px-4 py-8 px-[77px] bg-white rounded-md">
                 <h1 class=" font-bold text-center mb-5">Студенты курса</h1>
-
-                <div class=" overflow-auto  h-[150px]">
+                <div v-if="students.length != 0" class=" overflow-auto  h-[150px]" @scroll="scrollStudent">
                     <div v-for="(elem, index) in students" :key="index" class=" flex items-center justify-between mt-2">
                         <div class=" flex items-center w-80">
                             <div class=" w-8">
@@ -125,10 +176,10 @@ export default{
                 <div class="mt-5">
                     <div v-if="student_course.length">  
                         <p class=" text-gray-500 font-semibold text-base">Студенты</p>
-                        <div class=" overflow-auto  h-[150px]">
+                        <div class=" overflow-auto  h-[150px]" @scroll="scrollStudentCourse">
                             <div v-for="(elem, index) in student_course" :key="index">
                                 <div class=" flex items-center justify-between mt-2">
-                                    <div class=" flex items-center">
+                                    <div class=" flex items-center w-80">
                                         <div class=" w-8">
                                             <svg width="30" height="36" viewBox="0 0 30 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M14.7275 1.5C18.9866 1.5002 22.4021 4.89789 22.4023 9.04395C22.4023 13.1902 18.9868 16.5887 14.7275 16.5889C10.4681 16.5889 7.05176 13.1903 7.05176 9.04395C7.05199 4.89777 10.4683 1.5 14.7275 1.5Z" stroke="black" stroke-width="3"/>

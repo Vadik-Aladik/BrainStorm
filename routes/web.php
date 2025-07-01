@@ -63,6 +63,8 @@ Route::middleware([AuthCheck::class])->group(function(){
 
         Route::get('/admin/course/{id}', [App\Http\Controllers\AdminController::class, 'course'])->name('admin.course');
         Route::post('/admin/course/{id}/data', [App\Http\Controllers\AdminController::class, 'courseData']);
+        Route::post('/admin/course/{id}/dataStudents', [App\Http\Controllers\AdminController::class, 'courseDataStudents']);
+        Route::post('/admin/course/{id}/dataStudentsCourse', [App\Http\Controllers\AdminController::class, 'courseDataStudentsCourse']);
 
         Route::post('/admin/add_student/{idStudent}/course/{idCourse}', [App\Http\Controllers\AdminController::class, 'addStudent']);
         Route::post('/admin/delete_student/{idStudent}/course/{idCourse}', [App\Http\Controllers\AdminController::class, 'deleteStudent']);

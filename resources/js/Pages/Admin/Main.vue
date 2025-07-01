@@ -6,7 +6,9 @@ import { route } from 'ziggy-js';
 export default{
     data(){
         return{
-            course: null,
+            course: [],
+            page: 1,
+            flagLoadCourse: false,
         }
     },
     components:{
@@ -15,8 +17,12 @@ export default{
     },
     methods:{
         async getData(){
-            const res = await axios.post('/adminData');
-            this.course = res.data.resource_course;
+            const res = await axios.post(`/adminData?page=${this.page}`);
+            ++this.page;
+            this.course.push(...res.data.resource_course);
+            if(res.data.course.next_page_url == null){
+                return this.flagLoadCourse = true;
+            };
         }
     },
     mounted(){
@@ -53,6 +59,10 @@ export default{
                             </Link>
                         </div>
                     </div>
+                </div>
+                <div class=" flex justify-end">
+                    <button v-if="!flagLoadCourse" @click.prevent="getData()" class="px-[30px] py-[10px] hover:bg-blue-200 
+                hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100">Загрузить еще...</button>
                 </div>
             </div>
 

@@ -43,4 +43,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected $guarded = [];
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'student_id');
+    }
 }

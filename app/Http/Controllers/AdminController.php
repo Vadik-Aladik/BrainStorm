@@ -113,7 +113,8 @@ class AdminController extends Controller
     }
     public function mainPost()
     {
-        $course = Course::where("user_id", auth()->id())->get();
+        // $course = Course::where("user_id", auth()->id())->get();
+        $course = Course::where("user_id", auth()->id())->paginate(2);
         $resource = CourseResource::collection($course); 
         // $students = Student::with(['user', 'curs'])->get();
         return response()->json( [
@@ -133,21 +134,41 @@ class AdminController extends Controller
 
     public function courseData($id)
     {
-        $course=Course::where("id", $id)->get();
+        // $course=Course::where("id", $id)->get();
+        $course=Course::where("id", $id)->firstOrFail();
         $users = User::all();
 
         // $studentsCourse = Student::where('course_id', $id)->with('courseStudent')->get();
         $students = Student::where('course_id', $id)->with('user')->get();
         $studentsCourse = $students->pluck('user');
         
-        $testsCourse = Test::where('course_id', $id)->get();
+        $testsCourse = Test::where('course_id', $id)->paginate(6);
 
         return response()->json([
             "tests" => $testsCourse,
             "users_for_add" => $users,
             "users_in_course" => $studentsCourse,
-            "course_name" => $course[0]['course_name'],
-            "course_id" => $course[0]['id']
+            "course_name" => $course->course_name,
+            "course_id" => $course->id
+        ]);
+    }
+    public function courseDataStudents($id)
+    {
+        $users = User::whereDoesntHave('students', function($query) use ($id) {
+            $query->where('course_id', $id);
+        })->paginate(3);
+
+        return response()->json([
+            "users_for_add" => $users,
+        ]);
+    } 
+    public function courseDataStudentsCourse($id)
+    {
+        $students = Student::where('course_id', $id)->with('user')->paginate(3);
+        $studentsCourse = $students->pluck('user');
+
+        return response()->json([
+            "users_in_course" => $studentsCourse,
         ]);
     }
 
@@ -176,13 +197,10 @@ class AdminController extends Controller
 
     public function progressData()
     {
-        // $testForCheck = Test::where('check', true)->with('testStudent.userGet')->get();
-        // $countStudentCourse = Course::with('countStudentCourse')->withCount(['countStudentCourse'])->get();
-        $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->get();
+        // $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->get();
+        $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->paginate(2);
         $courseWithTests = AdminProgressResource::collection($courseTest);
         return response()->json([
-            // 'course_for_check' => $testForCheck,
-            // 'countStudentCourse' => $countStudentCourse,
             'courseTestInfo' => $courseTest,
             'courseWithTests' => $courseWithTests
         ]);

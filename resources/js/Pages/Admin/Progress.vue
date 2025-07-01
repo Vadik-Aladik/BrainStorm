@@ -10,6 +10,9 @@ export default{
             dataCompleteTest:[],
 
             modalFlag: false,
+            flagLoadCourse: false,
+
+            page: 1,
         }
     },
     components:{
@@ -18,9 +21,13 @@ export default{
     },
     methods:{
         async getData(){
-            const res = await axios.post('/admin/progress/data');
+            const res = await axios.post(`/admin/progress/data?page=${this.page}`);
+            ++this.page;
 
-            this.dataCourse = res.data.courseWithTests;
+            this.dataCourse.push(...res.data.courseWithTests);
+            if(res.data.courseTestInfo.next_page_url == null){
+                return this.flagLoadCourse = true;
+            };
         },
         
         modalTest(indexCourse, indexTest){
@@ -82,6 +89,10 @@ export default{
                     </div>
                 </div>
             </div>
+            <div class=" flex justify-center">
+                    <button v-if="!flagLoadCourse" @click.prevent="getData()" class="px-[30px] py-[10px] hover:bg-blue-200 
+                hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100">Загрузить еще...</button>
+                </div>
         </div>
     </ComboComponent>
 
