@@ -36,17 +36,12 @@ export default{
                 this.password_error = error.response.data.errors.password;
                 this.password_confirm_error = error.response.data.errors.password_confirm;
             })
-
-            // if(res || res.data.auth){
-            //     router.visit('/');
-            // }
         }
     }
 }
 </script>
 
 <template>
-    <!-- <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] h-screen flex justify-center items-center"> -->
     <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] h-screen flex">
         <div class=" bg-white w-[340px] py-[30px] flex flex-col items-center rounded-md my-auto mx-auto min-[370px]:w-[562px]">
             <h1 class=" text-xl font-bold mb-[15px]">Регистрация</h1>

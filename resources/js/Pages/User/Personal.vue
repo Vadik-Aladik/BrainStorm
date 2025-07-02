@@ -71,10 +71,8 @@ export default{
 <template>
     <ComboComponent>
         <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]">
-            <!-- <div class=" text-2xl flex justify-between max-[550px]:block"> -->
             <div class=" text-2xl flex justify-between items-center max-md:block max-[766px]:flex max-[766px]:flex-col max-[766px]:items-center">
                 <div>Здравствуйте, <span class=" font-semibold text-blue-600">{{user.name}}</span></div>
-                <!-- <div class="flex items-center max-md:flex-col max-md:h-36 max-md:justify-between max-[550px]:h-[40px] max-[550px]:my-4 max-[550px]:flex-row max-[460px]:flex-col max-[460px]:h-36 max-[460px]:mt-5"> -->
                 <div class="flex items-center my-4 max-[489px]:flex-col max-[489px]:max-h-28 max-[489px]:justify-between">
                     <div v-if="user.role == 'admin'" class="max-[489px]:mb-4">
                         <Link :href="route('admin.main')" class="px-[30px] py-[10px] bg-gray-100 hover:bg-orange-200 hover:text-orange-600 rounded-md my-[10px] text-lg transition ease-in">
@@ -115,10 +113,8 @@ export default{
 
             <div class="flex flex-col items-center min-[768px]:block">
                 <span class="text-base my-1 text-gray-500">Ваш прогресс</span>
-                <!-- <div v-if="result.data.length != 0">    -->
                 <div v-if="result.length != 0">   
                     <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal">
-                        <!-- <div v-for="elem in result.data" :key="elem"> -->
                         <div v-for="elem in result" :key="elem">
                             <Link :href="route('student.test.view', elem.test_id)">
                                 <div v-if="elem.status && elem.score >= 80" class="w-[200px] min-h-[85px] rounded-md border-2 border-gray-400 p-[10px] 
@@ -166,7 +162,6 @@ export default{
 
     <div v-if="modalFlag">
         <div class=" bg-black bg-opacity-50 h-full w-full flex items-center justify-center fixed top-0 left-0 text-lg">
-            <!-- <div class=" min-w-[400px] py-8 px-[77px] bg-white rounded-md"> -->
             <div class=" min-w-[400px] max-[490px]:min-w-[320px] max-[490px]:px-4 py-8 px-[77px] bg-white rounded-md">
                 <div class=" flex justify-between items-center">
                     <span class=" text-xl">Редактирование аккаунта</span>

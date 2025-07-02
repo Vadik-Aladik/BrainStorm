@@ -95,10 +95,6 @@ class AuthController extends Controller
                 'name'=>$data['name'],
                 'email'=>$data['email'],
             ]);
-            // return response()->json([
-            //     'data' => $data,
-            //     'change_password?' => false,
-            // ]);
         }
         else{
             User::where('id', auth()->id())->update([
@@ -106,10 +102,6 @@ class AuthController extends Controller
                 'email'=>$data['email'],
                 'password'=>Hash::make($data['password']),
             ]);
-            // return response()->json([
-            //     'data' => $data,
-            //     'change_password?' => true,
-            // ]);
         }
 
         return response()->json([

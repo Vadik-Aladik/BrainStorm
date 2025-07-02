@@ -21,24 +21,6 @@ class UserProgressResource extends JsonResource
             'course_name' => $this->course_name,
             'tests' => $this->formatCompletedTests()
         ];
-
-        // return [
-        //     'course_id' => $this->id,
-        //     'course_name' => $this->course_name,
-        //     'image' => $this->img,
-        //     'color' => $this->color,
-        //     'tests' => $this->completeTest->map(function ($test) {
-        //         // Находим соответствующий прогресс пользователя для этого теста
-        //         $progress = $this->progress_user->firstWhere('test_id', $test->id);
-                
-        //         return [
-        //             'test_id' => $test->id,
-        //             'test_name' => $test->test_name,
-        //             'score' => $progress ? $progress->score_student : null,
-        //             'is_checked' => $progress ? (bool)$progress->is_checked : false,
-        //         ];
-        //     }),
-        // ];
     }
 
     protected function formatCompletedTests(): array

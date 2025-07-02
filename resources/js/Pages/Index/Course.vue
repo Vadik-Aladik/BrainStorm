@@ -16,10 +16,8 @@ export default{
 
 <template>
     <ComboComponent>
-        <!-- <div class=" py-[30px] px-4 min-[360px]:px-[77px] bg-white rounded-xl min-h-[780px]"> -->
         <div class=" py-[30px] px-4 min-[490px]:px-[77px] bg-white rounded-xl min-h-[780px]">
             <h1 class=" font-semibold text-2xl text-center">{{course_admin[0].course_name}}</h1>
-            <!-- <div class=" overflow-auto h-[678px] mt-5"> -->
             <div class=" min-h-[678px] mt-5">
 
                 <div v-if="course_admin[0].all_test.length != 0" class=" mt-3 flex flex-col items-center md:items-start min-[450px]:items-normal">

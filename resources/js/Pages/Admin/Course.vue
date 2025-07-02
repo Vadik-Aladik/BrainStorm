@@ -9,7 +9,6 @@ export default{
             flagLoadCourse: false,
             flagLoadStudent: false,
             flagLoadStudentCourse: false,
-            // test_course: this.tests,
 
             name: null,
             id: 0,
@@ -22,6 +21,7 @@ export default{
         }
     },
     methods:{
+        // Загрузка и удаление тестов и студентов
         async deleteTest(index, id){
             const deleteTestAgree = confirm ("Вы уверены что хоитие удалить тест");
             if(deleteTestAgree){
@@ -41,13 +41,9 @@ export default{
         },
         async dataCourse(){
             const res = await axios.post(`/admin/course/${this.course_id}/data?page=${this.page}`);
-            // this.result = res;
             this.name = res.data.course_name;
             this.id = res.data.course_id;
             this.tests.push(...res.data.tests.data);
-
-            // this.students = res.data.users_for_add;
-            // this.student_course = res.data.users_in_course;
 
             this.students = this.students.filter((item) => !this.student_course.some(elem=> elem.id === item.id));
             
@@ -56,6 +52,8 @@ export default{
                 return this.flagLoadCourse = true;
             }
         },
+
+        // Пагинация пользователей в модальном окне 
         async dataStudents(){
             const res = await axios.post(`/admin/course/${this.course_id}/dataStudents?page=${this.pageStudents}`);
             this.students.push(...res.data.users_for_add.data);
@@ -68,7 +66,6 @@ export default{
         async dataStudentsCourse(){
             const res = await axios.post(`/admin/course/${this.course_id}/dataStudentsCourse?page=${this.pageStudentsCourse}`);
             this.student_course.push(...res.data.users_in_course);
-            console.log(res);
 
             ++this.pageStudentsCourse;
             if(res.data.users_in_course.length == 0){
@@ -89,7 +86,6 @@ export default{
                 if(!this.flagLoadStudentCourse){
                     this.dataStudentsCourse();
                 }
-                // this.dataStudentsCourse();
             }
         },
         modalFun(){
@@ -113,7 +109,6 @@ export default{
 
 <template>
     <ComboComponent>
-        <!-- <div class=" py-[30px] px-[77px] bg-white rounded-xl min-h-[780px]"> -->
         <div class=" py-[30px] px-4 min-[490px]:px-[77px] bg-white rounded-xl min-h-[780px]">
             <div class="flex items-center justify-center max-[525px]:flex-col">
                 <h1 class=" font-semibold text-2xl text-center">{{ name }}</h1>

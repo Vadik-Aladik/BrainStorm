@@ -29,13 +29,13 @@ Route::middleware([AuthCheck::class])->group(function(){
     Route::get('/', [App\Http\Controllers\IndexController::class, 'main'])->name('student.index');
     Route::get('/course/{id}', [App\Http\Controllers\IndexController::class, 'course'])->name('student.course');
     Route::get('/course/{id}/test/{idTest}', [App\Http\Controllers\IndexController::class, 'test'])->name('student.test');
-    Route::post('/test/{idTest}/get', [App\Http\Controllers\IndexController::class, 'testGet'])->name('student.test.get');
+    Route::post('/test/{idTest}/get', [App\Http\Controllers\IndexController::class, 'getTest'])->name('student.test.get');
     Route::post('/test', [App\Http\Controllers\IndexController::class, 'userTest']);
 
     Route::get('/test/{idTest}', [App\Http\Controllers\IndexController::class, 'viewTest'])->name('student.test.view');
 
     Route::get('/progress', [App\Http\Controllers\IndexController::class, 'progress'])->name('student.progress');
-    Route::post('/progressPost', [App\Http\Controllers\IndexController::class, 'progressPost']);
+    Route::post('/progressPost', [App\Http\Controllers\IndexController::class, 'postProgress']);
 
     Route::get('/personal', [App\Http\Controllers\AuthController::class, 'personal'])->name('student.personal');
     Route::post('/personal', [App\Http\Controllers\AuthController::class, 'personalData']);
@@ -45,16 +45,16 @@ Route::middleware([AuthCheck::class])->group(function(){
 
     Route::middleware([AdminCheck::class])->group(function(){
         Route::get('/admin', [App\Http\Controllers\AdminController::class, 'main'])->name('admin.main'); // первая работа с получением данных с сторны фронта, используя асинхронные запрсы Post
-        Route::post('/adminData', [App\Http\Controllers\AdminController::class, 'mainPost']); // первая работа с получением данных с сторны фронта, используя асинхронные запрсы Post
-
-        Route::get('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'createTest'])->name('admin.create.test');
-        Route::post('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'createTestPost']);
-
-        Route::get('/admin/checkTest/{idTest}/{idUser}', [App\Http\Controllers\AdminController::class, 'checkTest'])->name('admin.test.check');
-        Route::post('/admin/changeResult', [App\Http\Controllers\AdminController::class, 'checkTestPost']);
+        Route::post('/adminData', [App\Http\Controllers\AdminController::class, 'postMain']); // первая работа с получением данных с сторны фронта, используя асинхронные запрсы Post
 
         Route::get('/admin/new/course', [App\Http\Controllers\AdminController::class, 'createCourse'])->name('admin.create.course');
-        Route::post('/admin/new/course', [App\Http\Controllers\AdminController::class, 'createCoursePost']);
+        Route::post('/admin/new/course', [App\Http\Controllers\AdminController::class, 'postCreateCourse']);
+        
+        Route::get('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'createTest'])->name('admin.create.test');
+        Route::post('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'postCreateTest']);
+
+        Route::get('/admin/checkTest/{idTest}/{idUser}', [App\Http\Controllers\AdminController::class, 'checkTest'])->name('admin.test.check');
+        Route::post('/admin/changeResult', [App\Http\Controllers\AdminController::class, 'postCheckTest']);
 
         Route::post('admin/test/{id}/delete', [App\Http\Controllers\AdminController::class, 'delete'])->name('admin.delete.test');
 

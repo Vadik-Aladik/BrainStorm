@@ -112,8 +112,6 @@ export default{
                     router.visit('/');
                 }
             }
-
-            // router.visit("student.index");
         }
     },
     mounted(){

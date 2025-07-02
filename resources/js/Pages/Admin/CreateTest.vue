@@ -30,7 +30,6 @@ export default{
     methods:{
         changeSelect(test, index){
             if(test.select == 'input' || test.select == 'textarea'){
-                // test.answers = [{answer:'', status: false}];
                 test.answers = [{answer: ''}];
             }
             if(test.select == "Delete"){
@@ -145,12 +144,10 @@ export default{
 <template>
     <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <!-- <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center"> -->
             <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[100px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center">
                 <div>
                     <div class=" mb-4 ">
                         <input v-model="test_name" type="text" class=" w-[382px] max-[400px]:w-72 h-[40px] pl-4 focus:outline-none focus:border-2 focus:border-blue-800 border-2 border-gray-400 rounded mt-[5px] placeholder:font-light text-blue-600 font-bold" placeholder="Введите название курса">
-                        <!-- <p class=" text-red-600 text-sm hidden">Внимание! Если вы не введете ответ в поле ввода, вам придется проверять тест студента после его прохождения на вкладке “Проверить” на странице “Прогресс”</p> -->
                         <div v-if="errors.length != 0" class=" text-red-600 text-sm border border-red-700 bg-red-200 w-[320px] p-4 rounded-md my-2 font-medium">
                             <div class="min-w-1" v-for="elem in errors" :key="elem">
                                 {{ elem }}

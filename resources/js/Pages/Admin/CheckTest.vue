@@ -93,9 +93,7 @@ export default{
 <template>
     <div class=" py-[30px] bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] min-h-screen flex justify-center items-center text-lg">
         <div class=" container mx-auto">
-            <!-- <div class=" bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] "> -->
             <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[100px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center">
-            <!-- <div class="bg-white py-[30px] px-[76px] rounded-[10px] min-h-[1020px] max-sm:px-5 my-5 max-md:flex max-md:flex-col max-md:items-center"> -->
                 <div>
                     <h1 class=" text-2xl text-blue-600 font-semibold mb-[30px]">{{test.test_name}}</h1>
 
@@ -144,7 +142,6 @@ export default{
 
                 <div class=" flex justify-between max-md:flex-col ">
                     <Link :href="route('admin.progress')" class=" py-[6px] px-[20px] rounded hover:bg-blue-200 text-center hover:text-blue-600 transition ease-in ml-5 text-lg max-md:my-5 max-md:ml-0">Закрыть</Link>
-                    <!-- <Link :href="route('admin.progress')" class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg">Сохранить</Link> -->
                     <button @click.prevent="postRes" class=" py-[6px] px-[20px] rounded hover:bg-green-200 hover:text-green-600 transition ease-in ml-5 text-lg max-md:ml-0">Сохранить</button>
                 </div>
             </div>

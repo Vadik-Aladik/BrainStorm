@@ -14,11 +14,6 @@ export default{
         'check',
         'res',
     ],
-
-    // mounted(){
-    //     console.log(this.result.data);
-    //     console.log(this.check.data);
-    // }
 }
 </script>
 
@@ -58,10 +53,8 @@ export default{
             
             <div class=" mt-8 flex flex-col items-center min-[768px]:block">
                 <span class=" font-semibold text-xl">Ваши результы</span>
-                    <!-- <div v-if="result.data.length > 0" class="flex flex-col items-center min-[768px]:block"> -->
                     <div v-if="result.data.length > 0">
                         <div class="text-base my-1 text-gray-500 max-[768px]:text-center">Проверенные</div>
-                        <!-- <div class="flex flex-wrap mx-5 mt-3 justify-center lg:justify-normal"> -->
                         <div class="flex flex-wrap mx-5 max-[768px]:mx-auto max-[768px]:w-[360px] max-[399px]:flex-col max-[399px]:items-center">
                             <div v-for="elem in result.data" :key="elem">
                                 <Link :href="route('student.test.view', elem.test_id)">

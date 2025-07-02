@@ -40,7 +40,6 @@ export default{
 </script>
 
 <template>
-    <!-- <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] h-screen flex justify-center items-center"> -->
     <section class=" bg-cover bg-center bg-[url(/public/img/background/page-course.svg)] h-screen flex">
         <div class=" bg-white w-[340px] py-[30px] flex flex-col items-center rounded-md mx-auto my-auto min-[320px]:w-[562px]">
             <h1 class=" text-xl font-bold mb-[15px]">Вход</h1>

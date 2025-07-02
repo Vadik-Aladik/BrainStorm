@@ -20,23 +20,17 @@ class IndexController extends Controller
 {
     public function main()
     {
-        // DB::table("user_tests")->delete();
-        // DB::table("user_answers")->delete();
-        // $courseStudent = Course::all();
         $res = Student::where('student_id', auth()->id())->with('curs')->get();
         $courseStudent = $res->pluck('curs')->sort();
         $resourceCourse = CourseResource::collection($courseStudent); 
         
-        // $resultUser = UserTest::where('user_id', auth()->id())->with(['testGet', 'courseGet'])->limit(2)->get();
         $resultUser = UserTest::where('user_id', auth()->id())->where('is_checked', 1)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->take(6)->get();
         $resourceResult = UserResultResource::collection($resultUser);
 
         $checkUser = UserTest::where('user_id', auth()->id())->where('is_checked', 0)->with(['testGet', 'courseGet'])->orderBy('created_at', 'desc')->get();
         $resourceCheck = UserResultResource::collection($checkUser);
 
-        // $progress = Student::where('student_id', auth()->id())->with(['curs.progress_user','curs.completeTest'])->get();
-
-        return Inertia::render('Index/App', [
+        return Inertia::render('Index/Main', [
             'courses' => $resourceCourse,
             'result' => $resourceResult,
             'check' => $resourceCheck,
@@ -54,14 +48,13 @@ class IndexController extends Controller
             $course = Course::where('id', $id)->with(['completeTest', 'allTest'])->get();
             return Inertia::render('Index/Course', [
                 'course_admin' => $course,
-                'complete_test' => $completeTest, // delete?
+                'complete_test' => $completeTest,
             ]);
         }
     }
 
     public function test($id, $idTest)
     {
-        // $testCourse = Test::where('id', $idTest)->with('quest.answer')->get();
         $completeTest = UserTest::where('user_id', auth()->id())->where('test_id', $idTest)->exists();
 
         if($completeTest || !Test::where('id', $idTest)->where('course_id', $id)->exists()){
@@ -79,7 +72,7 @@ class IndexController extends Controller
         
     }
 
-    public function testGet($idTest)
+    public function getTest($idTest)
     {
         $data = Test::where('id', $idTest)->with('quest.answer')->get();
         $test = TestResource::collection($data);
@@ -184,7 +177,7 @@ class IndexController extends Controller
         return Inertia::render("Index/Progress");
     }
 
-    public function progressPost()
+    public function postProgress()
     {
         //Ресурс для прогресса
         $progressUser = Student::where('student_id', auth()->id())->with(['curs.progress_user','curs.completeTest'])->get();

@@ -23,67 +23,18 @@ use Storage;
 
 class AdminController extends Controller
 {
-    public function createTest($id)
+    public function main()
     {
-        return Inertia::render('Admin/CreateTest', [
-            'course_id' => $id
-        ]);
+        return Inertia::render('Admin/Main');
     }
-
-    public function createTestPost($id, TestRequest $request)
+    public function postMain()
     {
-        $data = $request->validated();
-        $testArr = [];
-        $answertArr = [];
-        $emptyAnswer = [];
-        $flag = false;
-
-        $test = Test::create([
-            'course_id' => $id,
-            'test_name' => $data['test_name'],
-            'check' => false
-        ]);
-
-        foreach($data['test'] as $elem){
-            // array_push($testArr, [$elem['quest'], $elem['select']]);
-            $quest = Question::create([
-                'test_id' => $test->id,
-                'quest_text' => $elem['quest'],
-            ]);
-
-            foreach($elem['answers'] as $answerItem){ // Переименуем переменную, чтобы не было конфликта
-                if($elem['select'] == 'radio' || $elem['select'] == 'checkbox'){
-                    Answer::create([
-                        'quest_id' => $quest->id,
-                        'answer_text' => $answerItem['answer'],
-                        'type' => $elem['select'],
-                        'status' => $answerItem['status'],
-                        // 'answer' => null // Явно указываем null для этих типов
-                    ]);
-                }
-                else{
-                    Answer::create([
-                        'quest_id' => $quest->id,
-                        'answer_text' => $answerItem['answer'],
-                        'type' => $elem['select'],
-                        'status' => null, // Явно указываем null для статуса
-                        // 'answer' => $answerItem['answer']
-                    ]);
-                    if(empty($answerItem['answer']) || $elem['select']=='textarea'){ // Правильная проверка на пустоту
-                        array_push($emptyAnswer, $elem['quest']);
-                    }
-                }
-            }
-        }
-
-        if(!empty($emptyAnswer)){ // Нужна (была), чтобы понимать нужно проверять тест в будущем или нет, при создании теста в начале стоит false, т.е. не надо
-            $test->update([
-                'check' => true
-            ]);
-        }
-
-        return response()->json([
-            'result' => true
+        $course = Course::where("user_id", auth()->id())->paginate(2);
+        $resource = CourseResource::collection($course); 
+        return response()->json( [
+            'course' => $course,
+            'resource_course' => $resource,
+            'auth' => auth()->check()
         ]);
     }
 
@@ -92,7 +43,7 @@ class AdminController extends Controller
         return Inertia::render('Admin/AddCourse');
     }
 
-    public function createCoursePost(CourseRequest $request)
+    public function postCreateCourse(CourseRequest $request)
     {
         $data = $request->validated();
         $path = Storage::disk('public')->put('/img', $data['img']);
@@ -107,21 +58,61 @@ class AdminController extends Controller
         ]);
     }
 
-    public function main()
+    public function createTest($id)
     {
-         return Inertia::render('Admin/Main');
+        return Inertia::render('Admin/CreateTest', [
+            'course_id' => $id
+        ]);
     }
-    public function mainPost()
+
+    public function postCreateTest($id, TestRequest $request)
     {
-        // $course = Course::where("user_id", auth()->id())->get();
-        $course = Course::where("user_id", auth()->id())->paginate(2);
-        $resource = CourseResource::collection($course); 
-        // $students = Student::with(['user', 'curs'])->get();
-        return response()->json( [
-            // 'students' => $students,
-            'course' => $course,
-            'resource_course' => $resource,
-            'auth' => auth()->check()
+        $data = $request->validated();
+        $emptyAnswer = [];
+
+        $test = Test::create([
+            'course_id' => $id,
+            'test_name' => $data['test_name'],
+            'check' => false
+        ]);
+
+        foreach($data['test'] as $elem){
+            $quest = Question::create([
+                'test_id' => $test->id,
+                'quest_text' => $elem['quest'],
+            ]);
+
+            foreach($elem['answers'] as $answerItem){ // Переименуем переменную, чтобы не было конфликта
+                if($elem['select'] == 'radio' || $elem['select'] == 'checkbox'){
+                    Answer::create([
+                        'quest_id' => $quest->id,
+                        'answer_text' => $answerItem['answer'],
+                        'type' => $elem['select'],
+                        'status' => $answerItem['status'],
+                    ]);
+                }
+                else{
+                    Answer::create([
+                        'quest_id' => $quest->id,
+                        'answer_text' => $answerItem['answer'],
+                        'type' => $elem['select'],
+                        'status' => null, // Явно указываем null для статуса
+                    ]);
+                    if(empty($answerItem['answer']) || $elem['select']=='textarea'){ // Правильная проверка на пустоту
+                        array_push($emptyAnswer, $elem['quest']);
+                    }
+                }
+            }
+        }
+
+        if(!empty($emptyAnswer)){ // Нужна, чтобы понимать нужно проверять тест в будущем или нет, при создании теста в начале стоит false, т.е. не надо
+            $test->update([
+                'check' => true
+            ]);
+        }
+
+        return response()->json([
+            'result' => true
         ]);
     }
 
@@ -134,11 +125,9 @@ class AdminController extends Controller
 
     public function courseData($id)
     {
-        // $course=Course::where("id", $id)->get();
         $course=Course::where("id", $id)->firstOrFail();
         $users = User::all();
 
-        // $studentsCourse = Student::where('course_id', $id)->with('courseStudent')->get();
         $students = Student::where('course_id', $id)->with('user')->get();
         $studentsCourse = $students->pluck('user');
         
@@ -197,7 +186,6 @@ class AdminController extends Controller
 
     public function progressData()
     {
-        // $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->get();
         $courseTest = Course::with(['course.testStudent.userGet', 'countStudentCourse'])->withCount(['countStudentCourse'])->paginate(2);
         $courseWithTests = AdminProgressResource::collection($courseTest);
         return response()->json([
@@ -216,10 +204,9 @@ class AdminController extends Controller
         ]);
     }
 
-    public function checkTestPost(CheckUserTestRequest $request)
+    public function postCheckTest(CheckUserTestRequest $request)
     {
         $data = $request->validated();
-        $arr=[];
 
         $userTest = UserTest::where('user_id', $data['user_id'])->where('test_id', $data['test_id'])->first();
         $userTest->update([
@@ -227,7 +214,7 @@ class AdminController extends Controller
             'is_checked' => true,
         ]);
         foreach($data['answer_user'] as $answer){
-            $userAnswer = UserAnswer::where('test_id', $userTest->id)->where('answer_id', $answer['id'])->update(['status'=> $answer['status']]);
+            $userAnswer = UserAnswer::where('test_id', $userTest->id)->where('answer_id', $answer['id'])->update(['status'=> $answer['status']]); // Замена статустов ответов пользователя
         }
         return response()->json([
             "res" => true,
