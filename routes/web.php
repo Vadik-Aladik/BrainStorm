@@ -49,6 +49,7 @@ Route::middleware([AuthCheck::class])->group(function(){
 
         Route::get('/admin/new/course', [App\Http\Controllers\AdminController::class, 'createCourse'])->name('admin.create.course');
         Route::post('/admin/new/course', [App\Http\Controllers\AdminController::class, 'postCreateCourse']);
+        Route::post('/admin/delete/course/{id}', [App\Http\Controllers\AdminController::class, 'deleteCourse']);
         
         Route::get('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'createTest'])->name('admin.create.test');
         Route::post('/admin/new/test/course/{id}', [App\Http\Controllers\AdminController::class, 'postCreateTest']);

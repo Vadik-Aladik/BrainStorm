@@ -1,6 +1,7 @@
 <script>
 import ComboComponent from "@/Layout/Combo.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import axios from "axios";
 import { route } from "ziggy-js";
 export default{
     data(){
@@ -82,7 +83,8 @@ export default{
         },
         scrollStudentCourse(event){
             const el = event.target;
-            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 1) {
+            // if (el.scrollTop + el.clientHeight >= el.scrollHeight - 1) {
+            if (el.scrollHeight - el.scrollTop - el.clientHeight >=  1) {
                 if(!this.flagLoadStudentCourse){
                     this.dataStudentsCourse();
                 }
@@ -93,6 +95,15 @@ export default{
             this.dataStudents();
             this.dataStudentsCourse();
         },
+        async deleteCourse(){
+            const res = await axios.post(`/admin/delete/course/${this.course_id}`).catch(error => {
+                console.log(error);
+            });
+
+            if(res.data.status){
+                return router.visit('/admin');
+            }
+        }
     },
     props:[
         'course_id'
@@ -113,7 +124,7 @@ export default{
             <div class="flex items-center justify-center max-[525px]:flex-col">
                 <h1 class=" font-semibold text-2xl text-center">{{ name }}</h1>
                 <button @click.prevent="modalFun" class="px-[30px] py-[10px] hover:bg-blue-200 
-                hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100 ml-5 max-[525px]:ml-0">Настроить студентов</button>
+                hover:text-blue-600 rounded-md my-[10px] text-lg transition ease-in bg-gray-100 ml-5 max-[525px]:ml-0">Настройка курса</button>
             </div>
 
             <div class="min-h-[678px] mt-5">
@@ -210,7 +221,8 @@ export default{
                     </div>
                 </div>
 
-                <div class=" flex justify-end">
+                <div class=" flex justify-between">
+                    <button class=" px-[30px] py-[10px] hover:bg-red-200 hover:text-red-600 rounded-md mt-5 bg-gray-100" @click.prevent="deleteCourse">Удалить курс</button>
                     <button class=" px-[30px] py-[10px] hover:bg-blue-200 hover:text-blue-600 rounded-md mt-5 bg-gray-100" @click.prevent="modalFlag=!modalFlag">Закрыть</button>
                 </div>
             </div>

@@ -58,6 +58,21 @@ class AdminController extends Controller
         ]);
     }
 
+    public function deleteCourse($id)
+    {
+        $course = Course::where('id', $id);
+        $courseGet = $course->get();
+
+        if(Storage::disk('public')->exists($courseGet[0]['img'])){
+            Storage::disk('public')->delete($courseGet[0]['img']);
+            $course->delete(); 
+
+            return response()->json([
+                'status' => true
+            ]);
+        }
+    }
+
     public function createTest($id)
     {
         return Inertia::render('Admin/CreateTest', [
@@ -118,9 +133,12 @@ class AdminController extends Controller
 
     public function course($id)
     {
-        return Inertia::render("Admin/Course", [
-            'course_id' => $id,
-        ]);
+        if(!empty(Course::where('id', $id)->count())){
+            return Inertia::render("Admin/Course", [
+                'course_id' => $id,
+            ]);
+        }
+        return to_route('student.index');
     }
 
     public function courseData($id)
@@ -145,7 +163,7 @@ class AdminController extends Controller
     {
         $users = User::whereDoesntHave('students', function($query) use ($id) {
             $query->where('course_id', $id);
-        })->paginate(3);
+        })->paginate(5);
 
         return response()->json([
             "users_for_add" => $users,
@@ -153,7 +171,7 @@ class AdminController extends Controller
     } 
     public function courseDataStudentsCourse($id)
     {
-        $students = Student::where('course_id', $id)->with('user')->paginate(3);
+        $students = Student::where('course_id', $id)->with('user')->paginate(5);
         $studentsCourse = $students->pluck('user');
 
         return response()->json([
